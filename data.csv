@@ -1,0 +1,6 @@
+type,lat,lon,name
+bunker,32.1,35,TelAviv
+shelter,32.1,35.2,Haifa
+shooting,32.2,35,Jerusalem
+bunker,32.2,35.1,Jerusalem
+bomb,32.3,35.1,TelAviv
