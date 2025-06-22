@@ -128,7 +128,7 @@ const MapContainer = ({
         {showDangerZones && (
           <div className="danger-zones-overlay">
             <DangerZone 
-              x={150} 
+              x={150}
               y={100} 
               radius={50} 
               level="high"

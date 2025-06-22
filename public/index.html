@@ -18,12 +18,12 @@
             --xp-green: #00a000;
             --xp-red: #c00000;
             --xp-yellow: #ffff00;
-            
+
             /* XP Gradients */
             --xp-button-gradient: linear-gradient(180deg, #ffffff 0%, #ece9d8 50%, #d6d3ce 100%);
             --xp-titlebar-gradient: linear-gradient(180deg, #0054e3 0%, #0040aa 100%);
             --xp-selected-gradient: linear-gradient(180deg, #316ac5 0%, #1f5caa 100%);
-            
+
             /* Typography */
             --xp-font: 'Tahoma', 'MS Sans Serif', sans-serif;
         }
@@ -157,6 +157,182 @@
             align-items: center;
         }
 
+        /* Add these styles to your existing CSS */
+
+        /* Update existing toolbar to use flexbox */
+        .xp-toolbar {
+            background: var(--xp-window-bg);
+            border-top: 1px solid var(--xp-dark-gray);
+            border-bottom: 1px solid var(--xp-white);
+            padding: 4px 8px;
+            display: flex;          /* Enable flexbox */
+            gap: 4px;
+            align-items: center;
+            justify-content: flex-start; /* Align items to left, except spacer will push clock right */
+        }
+
+        /* Spacer to push clock to the right */
+        .toolbar-spacer {
+            flex: 1; /* Takes up all remaining space */
+        }
+
+        /* Base clock container */
+        .toolbar-clock {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 3px 6px;
+            border: 1px inset var(--xp-gray);
+            background: var(--xp-white);
+            min-width: 85px;
+            font-family: var(--xp-font);
+            margin-left: 8px;
+        }
+
+        .clock-time {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--xp-black);
+            line-height: 1.1;
+        }
+
+        .clock-date {
+            font-size: 9px;
+            color: var(--xp-dark-gray);
+            line-height: 1.1;
+        }
+
+        /* Clock Style Variations */
+
+        /* Single line style */
+        .toolbar-clock.single-line {
+            flex-direction: row;
+            gap: 6px;
+            align-items: center;
+            min-width: 140px;
+        }
+
+        .toolbar-clock.single-line .clock-date {
+            font-size: 10px;
+        }
+
+        /* Digital/retro style */
+        .toolbar-clock.digital {
+            background: #000000;
+            border: 1px inset var(--xp-gray);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+
+        .toolbar-clock.digital .clock-time {
+            color: #00ff00;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 2px #00ff00;
+        }
+
+        .toolbar-clock.digital .clock-date {
+            color: #00aa00;
+            font-size: 9px;
+        }
+
+        /* Compact style */
+        .toolbar-clock.compact {
+            min-width: 65px;
+            padding: 2px 4px;
+        }
+
+        .toolbar-clock.compact .clock-time {
+            font-size: 10px;
+        }
+
+        .toolbar-clock.compact .clock-date {
+            font-size: 8px;
+        }
+
+        /* Highlighted style */
+        .toolbar-clock.highlighted {
+            background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+            border: 1px outset var(--xp-gray);
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Blinking seconds indicator (optional) */
+        .clock-time.blinking::after {
+            content: '';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .toolbar-clock {
+                min-width: 70px;
+                padding: 2px 4px;
+            }
+
+            .clock-time {
+                font-size: 10px;
+            }
+
+            .clock-date {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .toolbar-clock.single-line {
+                flex-direction: column;
+                min-width: 60px;
+            }
+
+            .toolbar-clock .clock-date {
+                display: none; /* Hide date on very small screens */
+            }
+        }
+
+        /* Clock hover effects */
+        .toolbar-clock:hover {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
+            cursor: default;
+        }
+
+        .toolbar-clock.digital:hover {
+            background: #111111;
+        }
+
+        /* Status bar clock (alternative position) */
+        .status-bar .toolbar-clock {
+            border: none;
+            background: transparent;
+            padding: 0 8px;
+            margin: 0;
+        }
+
+        .status-bar .clock-time,
+        .status-bar .clock-date {
+            color: var(--xp-black);
+        }
+
+        /* Clock with timezone label */
+        .toolbar-clock.with-timezone::before {
+            content: attr(data-timezone);
+            font-size: 7px;
+            color: var(--xp-dark-gray);
+            position: absolute;
+            top: 1px;
+            left: 2px;
+        }
+
+        .toolbar-clock.with-timezone {
+            position: relative;
+            padding-top: 12px;
+        }
+
         .toolbar-separator {
             width: 1px;
             height: 16px;
@@ -174,8 +350,8 @@
         /* Chat Panel */
         .chat-panel {
             position: fixed;
-            top: 50px;
-            right: 20px;
+            top: 75px;
+            right: 15px;
             width: 300px;
             height: 400px;
             background: var(--xp-window-bg);
@@ -270,8 +446,8 @@
         /* Layers Panel */
         .layers-panel {
             position: fixed;
-            top: 100px;
-            left: 20px;
+            top: 80px;
+            left: 60px;
             width: 200px;
             background: var(--xp-window-bg);
             border: 2px outset var(--xp-gray);
@@ -307,7 +483,7 @@
                 width: 280px;
                 right: 10px;
             }
-            
+
             .layers-panel {
                 width: 180px;
                 left: 10px;
@@ -324,7 +500,7 @@
             <div class="menu-item">View</div>
             <div class="menu-item">Map</div>
             <div class="menu-item">Tools</div>
-            <div class="menu-item">Help</div>
+            <div class="menu-item" onclick="alert('IN CASE OF EMERGENCY: +49 XXXXXXXXX \nEmbassy Map Help:\n\n🗺️ Left Click: Pan map\n🖱️ Mouse Wheel: Zoom\n🛠️ Toolbar: Use buttons for tools\n💬 Chat: Secure communications\n📂 Layers: Toggle map layers\n⌨️ Esc: Close windows\n\nEmbassy Map System v1.0')">Help</div>
         </div>
 
         <!-- Toolbar -->
@@ -336,15 +512,17 @@
             <button class="xp-button">📏 Measure</button>
             <button class="xp-button">🔍 Search</button>
             <div class="toolbar-separator"></div>
-            <button class="xp-button" id="refreshButton">↻ Refresh</button>
+            <button class="xp-button">↻ Refresh</button>
             <button class="xp-button">🎯 Center</button>
+            <div class="toolbar-spacer"></div>
+            <div class="toolbar-clock">
+                <span class="clock-time" id="clockTime">00:00:00</span>
+                <span class="clock-date" id="clockDate">Mon, Jan 1</span>
+            </div>
         </div>
 
         <!-- Map Container -->
         <div class="map-container" id="mapContainer">
-            <!-- <p style="font-size: 16px; margin-bottom: 10px;">🗺️ Embassy Map Interface</p>
-            <p>Geemap satellite imagery will be rendered here</p>
-            <p style="font-size: 10px; color: #808080;">Click toolbar buttons to interact with the map</p> -->
             <iframe src="map.html" style="border: none; width: 100%; height: 100%;"></iframe>
         </div>
 
@@ -366,15 +544,20 @@
         <div class="chat-header">
             <span>🔒 Secure Communications</span>
             <button class="control-btn" onclick="toggleChat()">✕</button>
-        </div>        <div class="chat-body" id="chatBody">
+        </div>
+        <div class="chat-body">
             <div style="padding: 8px; border-bottom: 1px solid #d0d0d0;">
-                <strong>🚨 System:</strong> Israel Emergency Safety Bot initialized. Ask about safety locations, emergency procedures, or current threats.<br>
-                <small style="color: #808080;" id="currentTime"></small>
+                <strong>System:</strong> Chat interface initialized.<br>
+                <small style="color: #808080;">12:34 PM</small>
+            </div>
+            <div style="padding: 8px;">
+                <strong>User:</strong> Map interface ready for operations.<br>
+                <small style="color: #808080;">12:35 PM</small>
             </div>
         </div>
         <div class="chat-footer">
-            <input type="text" class="chat-input" id="chatInput" placeholder="Ask about safety locations, emergencies...">
-            <button class="xp-button primary" id="sendButton" onclick="sendMessage()">Send</button>
+            <input type="text" class="chat-input" placeholder="Type a message...">
+            <button class="xp-button primary">Send</button>
         </div>
     </div>
 
@@ -386,21 +569,24 @@
         </div>
         <div class="layers-header">Available Layers</div>
         <div class="layer-item">
+            <input type="checkbox" class="layer-checkbox" checked> Satellite Imagery
+        </div>
+        <div class="layer-item">
             <input type="checkbox" class="layer-checkbox" checked> Embassy Locations
         </div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" checked> Danger Zones
+            <input type="checkbox" class="layer-checkbox"> Danger Zones
         </div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" checked> Safe Places
+            <input type="checkbox" class="layer-checkbox"> Traffic Data
         </div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" checked> Attack Locations
+            <input type="checkbox" class="layer-checkbox"> Weather Overlay
         </div>
     </div>
 
+
     <script>
-        // Global functions that need to be accessible from onclick handlers
         function toggleChat() {
             const chatPanel = document.getElementById('chatPanel');
             chatPanel.classList.toggle('open');
@@ -409,400 +595,34 @@
         function toggleLayers() {
             const layersPanel = document.getElementById('layersPanel');
             layersPanel.style.display = layersPanel.style.display === 'none' ? 'block' : 'none';
-        }        // Chat functionality
-        let isLoading = false;
-        
-        function getCurrentTime() {
-            return new Date().toLocaleTimeString().slice(0, 5);
         }
 
-        function refreshMap() {
-            const layerItems = layersPanel.querySelectorAll('.layer-item');
-            const layers = [];
-
-            for (let i = 0; i < layerItems.length; i++) {
-                const item = layerItems[i];
-                const checkbox = item.querySelector('.layer-checkbox');
-                const label = item.textContent.trim();
-
-                layers.push({
-                    name: label,
-                    checked: checkbox.checked
-                });
-            }
-
-            fetch('http://localhost:5000/update-map', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(layers)
-                })
-                .then(response => response.json())
-                .then(data => {
-                console.log('Server response:', data);
-                })
-                .catch(error => {
-                console.error('Error:', error);
-                });
-        }
-
-        document.getElementById('refreshButton').addEventListener('click', () => {
-            refreshMap();
-        });
-        
-        function parseMarkdown(text) {
-            // Convert markdown to HTML
-            return text
-                // Headers
-                .replace(/^### (.*$)/gm, '<h3 style="margin: 8px 0 4px 0; font-size: 13px; color: #333; border-bottom: 1px solid #ddd;">$1</h3>')
-                .replace(/^## (.*$)/gm, '<h2 style="margin: 10px 0 6px 0; font-size: 14px; color: #333; border-bottom: 2px solid #0054e3;">$1</h2>')
-                .replace(/^# (.*$)/gm, '<h1 style="margin: 12px 0 8px 0; font-size: 15px; color: #333; border-bottom: 2px solid #dc3545;">$1</h1>')
-                
-                // Bold text
-                .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: bold; color: #333;">$1</strong>')
-                
-                // Italic text
-                .replace(/\*(.*?)\*/g, '<em style="font-style: italic; color: #666;">$1</em>')
-                
-                // Code blocks
-                .replace(/```([\s\S]*?)```/g, '<pre style="background: #f4f4f4; padding: 8px; border-radius: 4px; margin: 4px 0; border-left: 3px solid #0054e3; font-family: monospace; font-size: 10px; overflow-x: auto; white-space: pre-wrap;"><code>$1</code></pre>')
-                
-                // Inline code
-                .replace(/`(.*?)`/g, '<code style="background: #f4f4f4; padding: 1px 3px; border-radius: 2px; font-family: monospace; font-size: 10px;">$1</code>')
-                
-                // Emergency action items (special bullets)
-                .replace(/^\* (.*$)/gm, '<li style="margin: 2px 0 2px 16px; list-style-type: none; position: relative;"><span style="position: absolute; left: -16px; color: #dc3545;">•</span>$1</li>')
-                .replace(/^- (.*$)/gm, '<li style="margin: 2px 0 2px 16px; list-style-type: none; position: relative;"><span style="position: absolute; left: -16px; color: #28a745;">→</span>$1</li>')
-                .replace(/^\d+\. (.*$)/gm, '<li style="margin: 2px 0 2px 20px; list-style-type: none; position: relative;"><span style="position: absolute; left: -20px; color: #0054e3; font-weight: bold;">$&</span></li>')
-                
-                // Emergency contacts with enhanced styling
-                .replace(/📞 (\d+)/g, '<span class="emergency-contact" style="background: linear-gradient(135deg, #fff3cd, #ffeaa7); padding: 3px 6px; border-radius: 12px; border: 1px solid #ffc107; font-weight: bold; font-size: 10px;">📞 $1</span>')
-                .replace(/🚔 Police: (\d+)/g, '<span class="emergency-contact" style="background: linear-gradient(135deg, #d1ecf1, #74b9ff); padding: 3px 6px; border-radius: 12px; border: 1px solid #17a2b8; font-weight: bold; color: #0056b3; font-size: 10px;">🚔 Police: $1</span>')
-                .replace(/🚑 Medical: (\d+)/g, '<span class="emergency-contact" style="background: linear-gradient(135deg, #f8d7da, #fd79a8); padding: 3px 6px; border-radius: 12px; border: 1px solid #dc3545; font-weight: bold; color: #721c24; font-size: 10px;">🚑 Medical: $1</span>')
-                .replace(/🚒 Fire: (\d+)/g, '<span class="emergency-contact" style="background: linear-gradient(135deg, #ffe6e6, #ff7675); padding: 3px 6px; border-radius: 12px; border: 1px solid #ff6b6b; font-weight: bold; color: #a71e25; font-size: 10px;">🚒 Fire: $1</span>')
-                .replace(/🏠 Home Front: (\d+)/g, '<span class="emergency-contact" style="background: linear-gradient(135deg, #e8f5e8, #00b894); padding: 3px 6px; border-radius: 12px; border: 1px solid #28a745; font-weight: bold; color: #155724; font-size: 10px;">🏠 Home Front: $1</span>')
-                
-                // Location markers with interactive styling
-                .replace(/📍 \*\*Relevant Locations:\*\*/g, '<div style="margin: 8px 0 4px 0; font-weight: bold; color: #0054e3; border-bottom: 1px solid #0054e3;">📍 Relevant Locations:</div>')
-                .replace(/(\d+)\. ([A-Z]+) in (.*?) \(GPS: (.*?), (.*?)\)/g, '<div class="location-marker" style="background: #e7f3ff; padding: 4px 6px; margin: 2px 0; border-radius: 4px; border-left: 3px solid #0054e3; font-size: 10px; cursor: pointer;" onclick="showLocationDetails(\'$2\', \'$3\', \'$4\', \'$5\')"><strong>$1. $2</strong> in $3<br><small style="color: #666;">📍 GPS: $4, $5</small></div>')
-                
-                // Warning sections
-                .replace(/⚠️ \*\*WARNING:(.*?)\*\*/g, '<div style="background: linear-gradient(135deg, #fff3cd, #ffeaa7); padding: 6px 8px; border-radius: 4px; border-left: 4px solid #ffc107; margin: 4px 0; font-weight: bold;">⚠️ WARNING:$1</div>')
-                
-                // Emergency instructions
-                .replace(/🚨 \*\*IMMEDIATE EMERGENCY ACTIONS:\*\*/g, '<div style="background: linear-gradient(135deg, #f8d7da, #fd79a8); padding: 6px 8px; border-radius: 4px; border-left: 4px solid #dc3545; margin: 4px 0; font-weight: bold; color: #721c24;">🚨 IMMEDIATE EMERGENCY ACTIONS:</div>')
-                .replace(/🚨 (.*?)(?=<br>|$)/g, '<div style="background: #f8d7da; padding: 4px 6px; border-radius: 4px; border-left: 3px solid #dc3545; margin: 2px 0; font-weight: bold; font-size: 10px;">🚨 $1</div>')
-                
-                // Rocket alert specific
-                .replace(/\*\*ROCKET ALERT:\*\*/g, '<div style="background: linear-gradient(135deg, #ff6b6b, #e17055); color: white; padding: 6px 8px; border-radius: 4px; margin: 4px 0; font-weight: bold; text-align: center; animation: pulse 1s infinite;">🚀 ROCKET ALERT 🚀</div>')
-                
-                // Time-sensitive information
-                .replace(/(\d+) seconds/g, '<span style="background: #ffeb3b; padding: 1px 3px; border-radius: 2px; font-weight: bold; color: #333;">$1 seconds</span>')
-                .replace(/90 seconds/g, '<span style="background: #ff5722; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; animation: blink 1s infinite;">⏰ 90 seconds ⏰</span>')
-                
-                // Line breaks
-                .replace(/\n\n/g, '<br><br>')
-                .replace(/\n/g, '<br>');
-        }
-
-        function showLocationDetails(type, city, lat, lon) {
-            alert(`${type} Location Details:\n\nCity: ${city}\nCoordinates: ${lat}, ${lon}\n\nClick OK to copy coordinates to clipboard.`);
-            navigator.clipboard.writeText(`${lat}, ${lon}`).then(() => {
-                console.log('Coordinates copied to clipboard');
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'
             });
-        }
-
-        function addMessage(sender, message, type = 'user') {
-            const chatBody = document.getElementById('chatBody');
-            const messageDiv = document.createElement('div');
-            messageDiv.style.padding = '8px';
-            messageDiv.style.borderBottom = '1px solid #d0d0d0';
-            
-            let senderIcon = '';
-            let senderStyle = '';
-            
-            switch(type) {
-                case 'user':
-                    senderIcon = '👤';
-                    senderStyle = 'color: #0054e3; font-weight: bold;';
-                    break;
-                case 'bot':
-                    senderIcon = '🤖';
-                    senderStyle = 'color: #28a745; font-weight: bold;';
-                    break;
-                case 'error':
-                    senderIcon = '❌';
-                    senderStyle = 'color: #dc3545; font-weight: bold;';
-                    break;
-                case 'system':
-                    senderIcon = '🚨';
-                    senderStyle = 'color: #17a2b8; font-weight: bold;';
-                    break;
-            }
-            
-            // Parse markdown for bot messages
-            const formattedMessage = type === 'bot' ? parseMarkdown(message) : message;
-            
-            messageDiv.innerHTML = `
-                <div style="margin-bottom: 4px;">
-                    <span style="${senderStyle}">${senderIcon} ${sender}:</span>
-                    <small style="color: #808080; float: right;">${getCurrentTime()}</small>
-                </div>
-                <div style="margin-left: 20px; line-height: 1.4; font-size: 11px;">
-                    ${formattedMessage}
-                </div>
-            `;
-            
-            chatBody.appendChild(messageDiv);
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-
-        function showLoading() {
-            const chatBody = document.getElementById('chatBody');
-            const loadingDiv = document.createElement('div');
-            loadingDiv.id = 'loadingMessage';
-            loadingDiv.style.padding = '8px';
-            loadingDiv.style.borderBottom = '1px solid #d0d0d0';
-            loadingDiv.style.fontStyle = 'italic';
-            loadingDiv.style.color = '#666';
-            loadingDiv.innerHTML = `
-                🤖 <strong>Emergency Bot:</strong> Analyzing emergency query...
-                <div style="margin-top: 4px;">
-                    <div style="display: inline-block; animation: pulse 1.5s infinite;">●</div>
-                    <div style="display: inline-block; animation: pulse 1.5s infinite 0.5s;">●</div>
-                    <div style="display: inline-block; animation: pulse 1.5s infinite 1s;">●</div>
-                </div>
-            `;
-            chatBody.appendChild(loadingDiv);
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-
-        function removeLoading() {
-            const loadingMessage = document.getElementById('loadingMessage');
-            if (loadingMessage) {
-                loadingMessage.remove();
-            }
-        }        async function sendMessage() {
-            const chatInput = document.getElementById('chatInput');
-            const sendButton = document.getElementById('sendButton');
-            const message = chatInput.value.trim();
-            
-            if (!message || isLoading) return;
-            
-            // Add user message
-            addMessage('You', message, 'user');
-            chatInput.value = '';
-            
-            // Disable input and show loading
-            isLoading = true;
-            chatInput.disabled = true;
-            sendButton.disabled = true;
-            sendButton.textContent = '...';
-            showLoading();
-            
-            try {
-                let response;
-                let data;
-                
-                // Handle special commands
-                if (message.startsWith('/')) {
-                    if (message.startsWith('/nearest')) {
-                        // Handle nearest location command
-                        try {
-                            const position = await getCurrentPosition();
-                            response = await fetch('http://localhost:8000/nearest', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ 
-                                    question: message,
-                                    user_lat: position.coords.latitude,
-                                    user_lon: position.coords.longitude
-                                }),
-                            });
-                        } catch (geoError) {
-                            addMessage('System', 
-                                'Location access denied or unavailable. Please enable location services or manually specify coordinates.', 
-                                'error'
-                            );
-                            return;
-                        }
-                    } else if (message.startsWith('/emergency')) {
-                        // Handle emergency command
-                        response = await fetch('http://localhost:8000/emergency', {
-                            method: 'GET',
-                        });                    } else if (message.startsWith('/stats')) {
-                        // Handle stats command
-                        response = await fetch('http://localhost:8000/stats', {
-                            method: 'GET',
-                        });
-                    } else if (message.startsWith('/mix-report') || message.startsWith('/report')) {
-                        // Handle mix report command
-                        response = await fetch('http://localhost:8000/mix-report', {
-                            method: 'GET',
-                        });                    } else if (message.startsWith('/help')) {
-                        // Handle help command locally
-                        const helpText = "🤖 Emergency Safety Bot Commands:\\n\\n" +
-                            "/emergency - Get immediate emergency actions\\n" +
-                            "/nearest - Find nearest safety location (requires location access)\\n" +
-                            "/stats - Show database statistics\\n" +
-                            "/mix-report or /report - Generate comprehensive safety data report\\n" +
-                            "/help - Show this help\\n\\n" +
-                            "Emergency Contacts:\\n" +
-                            "🚔 Police: 100\\n" +
-                            "🚑 Medical: 101\\n" +
-                            "🚒 Fire: 102\\n\\n" +
-                            "Simply type your emergency question for AI assistance!";
-                        removeLoading();
-                        addMessage('Emergency Bot', helpText, 'bot');
-                        return;
-                    } else {
-                        // Unknown command
-                        removeLoading();
-                        addMessage('System', 
-                            'Unknown command. Type /help for available commands.', 
-                            'error'
-                        );
-                        return;
-                    }
-                } else {
-                    // Regular question
-                    response = await fetch('http://localhost:8000/ask', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ question: message }),
-                    });
-                }
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                data = await response.json();
-                removeLoading();
-                
-                // Handle different response formats
-                if (data.response) {
-                    addMessage('Emergency Bot', data.response, 'bot');
-                } else if (data.total_records !== undefined) {
-                    // Stats response
-                    let statsText = `📊 **Database Statistics:**\n\n`;
-                    statsText += `📈 Total Records: ${data.total_records}\n\n`;
-                    
-                    if (data.data_types) {
-                        statsText += `🏷️ **Data Types:**\n`;
-                        Object.entries(data.data_types).forEach(([type, count]) => {
-                            statsText += `- ${type}: ${count}\n`;
-                        });
-                        statsText += '\n';
-                    }
-                    
-                    if (data.sources) {
-                        statsText += `📁 **Data Sources:**\n`;
-                        Object.entries(data.sources).forEach(([source, count]) => {
-                            statsText += `- ${source}: ${count}\n`;
-                        });
-                    }
-                    
-                    addMessage('Emergency Bot', statsText, 'bot');
-                } else {
-                    addMessage('Emergency Bot', 'Response received but format unknown.', 'bot');
-                }
-                
-            } catch (error) {
-                console.error('Error sending message:', error);
-                removeLoading();
-                addMessage('System', 
-                    `Connection error: ${error.message}. Make sure the API server is running on http://localhost:8000`, 
-                    'error'
-                );
-            } finally {
-                // Re-enable input
-                isLoading = false;
-                chatInput.disabled = false;
-                sendButton.disabled = false;
-                sendButton.textContent = 'Send';
-                chatInput.focus();
-            }
-        }
-
-        // Helper function to get user's current position
-        function getCurrentPosition() {
-            return new Promise((resolve, reject) => {
-                if (!navigator.geolocation) {
-                    reject(new Error('Geolocation is not supported by this browser.'));
-                    return;
-                }
-                
-                navigator.geolocation.getCurrentPosition(resolve, reject, {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 60000
-                });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'short', month: 'short', day: 'numeric'
             });
+
+            document.getElementById('clockTime').textContent = timeString;
+            document.getElementById('clockDate').textContent = dateString;
         }
 
-        // Initialize time display
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('currentTime').textContent = getCurrentTime();
-            
-            // Add enter key support
-            document.getElementById('chatInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-        });
-        function refreshMap() {
-            const layerItems = layersPanel.querySelectorAll('.layer-item');
-            const layers = [];
-
-            for (let i = 0; i < layerItems.length; i++) {
-                const item = layerItems[i];
-                const checkbox = item.querySelector('.layer-checkbox');
-                const label = item.textContent.trim();
-
-                layers.push({
-                    name: label,
-                    checked: checkbox.checked
-                });
-            }
-
-            fetch('http://localhost:5000/update-map', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(layers)
-                })
-                .then(response => response.json())
-                .then(data => {
-                console.log('Server response:', data);
-                })
-                .catch(error => {
-                console.error('Error:', error);
-                });
-        }
-
-        document.getElementById('refreshButton').addEventListener('click', () => {
-            refreshMap();
-        });
+        updateClock();
+        setInterval(updateClock, 1000);
 
         // Simulate XP window effects
         document.querySelectorAll('.xp-button').forEach(button => {
             button.addEventListener('mousedown', function() {
                 this.style.transform = 'translate(1px, 1px)';
             });
-            
+
             button.addEventListener('mouseup', function() {
                 this.style.transform = 'translate(0, 0)';
             });
-            
+
             button.addEventListener('mouseleave', function() {
                 this.style.transform = 'translate(0, 0)';
             });
@@ -824,107 +644,19 @@
                 clickEffect.style.pointerEvents = 'none';
                 clickEffect.style.animation = 'pulse 0.6s ease-out';
                 this.appendChild(clickEffect);
-                
+
                 setTimeout(() => {
                     clickEffect.remove();
                 }, 600);
             });
-        });        // Add pulse animation
+        });
+
+        // Add pulse animation
         const style = document.createElement('style');
         style.textContent = `
             @keyframes pulse {
                 0% { transform: scale(0); opacity: 1; }
                 100% { transform: scale(2); opacity: 0; }
-            }
-            
-            @keyframes pulse {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.3; }
-            }
-            
-            .chat-input:disabled {
-                background-color: #f5f5f5;
-                color: #999;
-                cursor: not-allowed;
-            }
-            
-            .xp-button:disabled {
-                background-color: #e0e0e0;
-                color: #999;
-                cursor: not-allowed;
-            }
-            
-            /* Markdown content styling */
-            .chat-body h1, .chat-body h2, .chat-body h3 {
-                font-family: 'Tahoma', sans-serif;
-                margin: 8px 0 4px 0;
-            }
-            
-            .chat-body ul {
-                margin: 4px 0;
-                padding-left: 0;
-            }
-            
-            .chat-body li {
-                margin: 2px 0;
-                line-height: 1.3;
-            }
-            
-            .chat-body pre {
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }
-            
-            .chat-body code {
-                word-break: break-word;
-            }
-            
-            /* Emergency highlight styling */
-            .emergency-contact {
-                display: inline-block;
-                margin: 2px;
-                animation: glow 2s ease-in-out infinite alternate;
-            }
-            
-            @keyframes glow {
-                from { box-shadow: 0 0 5px rgba(255, 193, 7, 0.3); }
-                to { box-shadow: 0 0 10px rgba(255, 193, 7, 0.6); }
-            }
-            
-            .location-marker {
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-              .location-marker:hover {
-                background-color: #0054e3 !important;
-                color: white !important;
-                transform: scale(1.05);
-            }
-            
-            /* Special emergency animations */
-            @keyframes blink {
-                0%, 50% { opacity: 1; }
-                51%, 100% { opacity: 0.3; }
-            }
-            
-            @keyframes urgentPulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-                100% { transform: scale(1); }
-            }
-            
-            .rocket-alert {
-                animation: urgentPulse 0.5s infinite;
-            }
-            
-            /* Better list styling */
-            .chat-body ul {
-                list-style: none;
-                padding-left: 0;
-            }
-            
-            .chat-body ol {
-                padding-left: 20px;
             }
         `;
         document.head.appendChild(style);

@@ -1,132 +1,92 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './ChatPanel.css';
-import { CloseIcon } from '../icons/XPIcons.js';
+// src/components/ChatPanel.js
+import React, { useState } from 'react';
+import { CloseIcon } from '../icons/XPIcons';
 
 const ChatPanel = ({ isOpen, onClose }) => {
+  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([
-    { 
-      id: 1, 
-      type: 'system', 
-      text: '🚨 Israel Emergency Safety Bot initialized. Ask about safety locations, emergency procedures, or current threats.', 
-      timestamp: new Date().toLocaleTimeString() 
+    {
+      id: 1,
+      sender: 'System',
+      text: 'Chat interface initialized.',
+      time: '12:34 PM',
+      type: 'system'
+    },
+    {
+      id: 2,
+      sender: 'User',
+      text: 'Map interface ready for operations.',
+      time: '12:35 PM',
+      type: 'user'
     }
   ]);
-  const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef(null);
 
-  // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
-
-    const userMessage = {
-      id: Date.now(),
-      type: 'user',
-      text: inputValue,
-      timestamp: new Date().toLocaleTimeString()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('http://localhost:8000/ask', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ question: inputValue }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      const botMessage = {
-        id: Date.now() + 1,
-        type: 'bot',
-        text: data.response,
-        timestamp: new Date().toLocaleTimeString()
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      const newMessage = {
+        id: messages.length + 1,
+        sender: 'User',
+        text: message,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        type: 'user'
       };
-
-      setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage = {
-        id: Date.now() + 1,
-        type: 'error',
-        text: `❌ Connection error: ${error.message}. Make sure the API server is running on http://localhost:8000`,
-        timestamp: new Date().toLocaleTimeString()
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
+      setMessages([...messages, newMessage]);
+      setMessage('');
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
+    if (e.key === 'Enter') {
+      handleSendMessage();
     }
   };
 
-  const getMessageClass = (type) => {
-    switch (type) {
-      case 'user': return 'message-user';
-      case 'bot': return 'message-bot';
-      case 'system': return 'message-system';
-      case 'error': return 'message-error';
-      default: return '';
-    }
-  };
+  if (!isOpen) return null;
 
   return (
     <div className={`chat-panel ${isOpen ? 'open' : ''}`}>
       <div className="chat-header">
-        <h3>🚨 Emergency Safety Chat</h3>
-        <button className="close-chat-btn" onClick={onClose}>
+        <span>🔒 Secure Communications</span>
+        <button className="control-btn" onClick={onClose}>
           <CloseIcon />
         </button>
       </div>
+      
       <div className="chat-body">
-        <div className="messages-container">
-          {messages.map((message) => (
-            <div key={message.id} className={`message ${getMessageClass(message.type)}`}>
-              <div className="message-content">
-                <div className="message-text">{message.text}</div>
-                <div className="message-time">{message.timestamp}</div>
-              </div>
+        {messages.map((msg) => (
+          <div key={msg.id} style={{
+            padding: '8px',
+            borderBottom: '1px solid #d0d0d0',
+            backgroundColor: msg.type === 'system' ? '#f0f8ff' : 'transparent'
+          }}>
+            <div style={{ fontWeight: 'bold', color: msg.type === 'system' ? '#0054e3' : '#000' }}>
+              {msg.sender}:
             </div>
-          ))}
-          {isLoading && (
-            <div className="message message-bot">
-              <div className="message-content">
-                <div className="message-text loading">🤖 Analyzing emergency query...</div>
-              </div>
+            <div style={{ marginTop: '2px' }}>
+              {msg.text}
             </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+            <div style={{ 
+              fontSize: '10px', 
+              color: 'var(--xp-dark-gray)', 
+              marginTop: '4px' 
+            }}>
+              {msg.time}
+            </div>
+          </div>
+        ))}
       </div>
+      
       <div className="chat-footer">
-        <input 
-          type="text" 
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+        <input
+          type="text"
+          className="chat-input"
+          placeholder="Type a message..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Ask about safety locations, emergencies..." 
-          disabled={isLoading}
         />
-        <button onClick={sendMessage} disabled={isLoading || !inputValue.trim()}>
-          {isLoading ? '...' : 'Send'}
+        <button className="xp-button primary" onClick={handleSendMessage}>
+          Send
         </button>
       </div>
     </div>

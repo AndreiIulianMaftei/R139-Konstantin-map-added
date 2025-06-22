@@ -1,24 +1,18 @@
 {
-  "name": "embassy-map-interface",
-  "version": "0.1.0",
+  "name": "xp-map-interface",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "cors": "^2.8.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "clsx": "^2.0.0"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"node src/server.js\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -31,13 +25,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "concurrently": "^9.1.2"
   }
 }
