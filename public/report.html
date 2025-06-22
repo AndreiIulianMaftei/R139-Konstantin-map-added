@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Incident Report - Deutsche Botschaft Tel Aviv</title>
+  <link rel="shortcut icon" href="https://tel-aviv.diplo.de/resource/blob/1445014/1b7353103b8d6217aab10f2706fa4c4d/homepage-telaviv-de-favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'BundesSansWeb', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+    
+    /* Header styles */
+    .header {
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      height: 50px;
+      width: auto;
+    }
+    
+    .nav {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .nav-link {
+      color: #000;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    
+    .nav-link:hover {
+      background-color: #f0f0f0;
+    }
+    
+    /* Main content */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .page-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .page-title h1 {
+      font-size: 36px;
+      color: #000;
+      margin-bottom: 10px;
+    }
+    
+    .page-title p {
+      font-size: 18px;
+      color: #666;
+    }
+    
+    /* Form styles */
+    .report-form {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 16px;
+    }
+    
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+    
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #000;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    .form-button {
+      background-color: #000;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    
+    .form-button:hover {
+      background-color: #333;
+    }
+    
+    .form-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .location-button {
+      background-color: #000;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background-color 0.3s;
+    }
+    
+    .location-button:hover {
+      background-color: #333;
+    }
+    
+    .location-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .coordinates-display {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    
+    .file-upload {
+      border: 2px dashed #ccc;
+      border-radius: 4px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      background-color: #f9f9f9;
+    }
+    
+    .file-upload:hover {
+      border-color: #000;
+      background-color: #f0f0f0;
+    }
+    
+    .file-upload input[type="file"] {
+      display: none;
+    }
+    
+    .file-upload-text {
+      color: #666;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    
+    .file-preview {
+      margin-top: 15px;
+      max-width: 300px;
+    }
+    
+    .file-preview img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .required {
+      color: #cc0000;
+    }
+    
+    .alert {
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    
+    .alert-success {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+    
+    .alert-error {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+    
+    .incident-item {
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .incident-item strong {
+      color: #000;
+      font-size: 16px;
+    }
+    
+    .incident-item p {
+      margin: 5px 0;
+      color: #666;
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .report-form {
+        padding: 20px;
+        margin: 0 10px;
+      }
+      
+      .page-title h1 {
+        font-size: 28px;
+      }
+      
+      .page-title p {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-wrapper">
+        <a href="index1.html" title="Deutsche Botschaft Tel Aviv - Startseite">
+          <img src="aamt-logo-dt-data.svg" alt="Logo des Auswärtigen Amts" class="logo">
+        </a>
+      </div>
+      
+      <nav class="nav">
+        <a href="index1.html" class="nav-link">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="page-title">
+      <h1>Emergency Incident Report</h1>
+      <p>Report security incidents, bombings, shootings, or other emergencies immediately</p>
+    </div>
+
+    <div class="report-form">
+      <div id="alert-container"></div>
+      
+      <form id="incident-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="location" class="form-label">
+            Location <span class="required">*</span>
+          </label>
+          <div style="display: flex; align-items: center;">
+            <input 
+              type="text" 
+              id="location" 
+              name="location" 
+              class="form-input" 
+              placeholder="Enter the exact location or address"
+              required
+              style="flex: 1;"
+            >
+            <button type="button" class="location-button" onclick="getCurrentLocation()">
+              Get My Location
+            </button>
+          </div>
+          <div id="coordinates-display" class="coordinates-display" style="display: none;">
+            Coordinates: <span id="coordinates-text">Not set</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="incident-type" class="form-label">
+            Incident Type <span class="required">*</span>
+          </label>
+          <select 
+            id="incident-type" 
+            name="incident-type" 
+            class="form-input" 
+            required
+          >
+            <option value="">Select incident type...</option>
+            <optgroup label="Emergency Incidents">
+              <option value="bomb">Bomb/Explosion</option>
+              <option value="explosion">Explosion</option>
+              <option value="car explosion">Car Explosion</option>
+              <option value="missile strike">Missile Strike</option>
+              <option value="air strikes">Air Strikes</option>
+              <option value="drone strike">Drone Strike</option>
+              <option value="shooting">Shooting/Gunfire</option>
+              <option value="gun fight">Gun Fight</option>
+              <option value="knife attack">Knife Attack</option>
+              <option value="street brawl">Street Brawl</option>
+            </optgroup>
+            <optgroup label="Military Activity">
+              <option value="forces gathering">Forces Gathering</option>
+              <option value="soldiers spotted">Soldiers Spotted</option>
+            </optgroup>
+            <optgroup label="Safe Locations">
+              <option value="shelter">Shelter/Safe Location</option>
+              <option value="bunker">Bunker/Underground</option>
+              <option value="food bank">Food Bank</option>
+            </optgroup>
+            <optgroup label="Diplomatic">
+              <option value="embassy">Embassy</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="incident">Other Incident</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="photo" class="form-label">
+            Photo (Optional)
+          </label>
+          <div class="file-upload" onclick="document.getElementById('photo').click()">
+            <div class="file-upload-text">
+              Click to upload a photo or drag and drop
+            </div>
+            <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(this)">
+            <div id="file-preview" class="file-preview"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="contact" class="form-label">
+            Contact Information (Optional)
+          </label>
+          <input 
+            type="text" 
+            id="contact" 
+            name="contact" 
+            class="form-input" 
+            placeholder="Your name and phone number (for follow-up if needed)"
+          >
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="form-button" id="submit-btn">
+            Submit Emergency Report
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2024 Deutsche Botschaft Tel Aviv. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Initialize local storage
+    if (!localStorage.getItem('incidents')) {
+      localStorage.setItem('incidents', JSON.stringify([]));
+    }
+
+    let currentCoordinates = null;
+
+    // Function to sort incidents by type
+    function sortIncidentsByType(incidents) {
+      const typeOrder = {
+        'bomb': 1,
+        'explosion': 1,
+        'car explosion': 1,
+        'missile strike': 1,
+        'air strikes': 1,
+        'drone strike': 1,
+        'shooting': 1,
+        'gun fight': 1,
+        'knife attack': 1,
+        'street brawl': 1,
+        'forces gathering': 2,
+        'soldiers spotted': 2,
+        'shelter': 3,
+        'bunker': 3,
+        'food bank': 3,
+        'embassy': 4,
+        'incident': 5
+      };
+
+      return incidents.sort((a, b) => {
+        const orderA = typeOrder[a.type] || 999;
+        const orderB = typeOrder[b.type] || 999;
+        
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        
+        // If same type, sort by timestamp (newest first)
+        return new Date(b.timestamp) - new Date(a.timestamp);
+      });
+    }
+
+    // Function to get type category name
+    function getTypeCategory(type) {
+      const categories = {
+        'bomb': 'Emergency Incidents',
+        'explosion': 'Emergency Incidents',
+        'car explosion': 'Emergency Incidents',
+        'missile strike': 'Emergency Incidents',
+        'air strikes': 'Emergency Incidents',
+        'drone strike': 'Emergency Incidents',
+        'shooting': 'Emergency Incidents',
+        'gun fight': 'Emergency Incidents',
+        'knife attack': 'Emergency Incidents',
+        'street brawl': 'Emergency Incidents',
+        'forces gathering': 'Military Activity',
+        'soldiers spotted': 'Military Activity',
+        'shelter': 'Safe Locations',
+        'bunker': 'Safe Locations',
+        'food bank': 'Safe Locations',
+        'embassy': 'Diplomatic',
+        'incident': 'Other'
+      };
+      return categories[type] || 'Other';
+    }
+
+    function previewImage(input) {
+      const preview = document.getElementById('file-preview');
+      const file = input.files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.innerHTML = '';
+      }
+    }
+
+    function showAlert(message, type) {
+      const container = document.getElementById('alert-container');
+      container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+      
+      setTimeout(() => {
+        container.innerHTML = '';
+      }, 5000);
+    }
+
+    function getCurrentLocation() {
+      const button = document.querySelector('.location-button');
+      const coordinatesDisplay = document.getElementById('coordinates-display');
+      const coordinatesText = document.getElementById('coordinates-text');
+      
+      if (!navigator.geolocation) {
+        showAlert('Geolocation is not supported by this browser.', 'error');
+        return;
+      }
+      
+      button.disabled = true;
+      button.textContent = 'Getting Location...';
+      
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          
+          currentCoordinates = { lat, lon };
+          // Format coordinates with 3 decimal places
+          coordinatesText.textContent = `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+          coordinatesDisplay.style.display = 'block';
+          
+          // Reverse geocode to get address
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.display_name) {
+                // Extract city name from the address
+                const addressParts = data.display_name.split(', ');
+                let cityName = '';
+                
+                // Try to find the city in the address parts
+                // Usually the city is in the first few parts
+                for (let i = 0; i < Math.min(3, addressParts.length); i++) {
+                  const part = addressParts[i].trim();
+                  // Skip if it's a number (house number) or very short
+                  if (!/^\d+$/.test(part) && part.length > 2) {
+                    cityName = part;
+                    break;
+                  }
+                }
+                
+                // If no suitable city found, use the first non-numeric part
+                if (!cityName) {
+                  for (const part of addressParts) {
+                    if (!/^\d+$/.test(part.trim()) && part.trim().length > 2) {
+                      cityName = part.trim();
+                      break;
+                    }
+                  }
+                }
+                
+                // Fallback to the first part if still no city found
+                if (!cityName && addressParts.length > 0) {
+                  cityName = addressParts[0].trim();
+                }
+                
+                document.getElementById('location').value = cityName;
+              }
+            })
+            .catch(error => {
+              console.log('Could not get address from coordinates');
+            });
+          
+          showAlert('Location obtained successfully!', 'success');
+        },
+        function(error) {
+          let errorMessage = 'Unable to retrieve your location.';
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = 'Location access denied. Please allow location access and try again.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = 'Location information unavailable.';
+              break;
+            case error.TIMEOUT:
+              errorMessage = 'Location request timed out.';
+              break;
+          }
+          showAlert(errorMessage, 'error');
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000
+        }
+      );
+      
+      button.disabled = false;
+      button.textContent = 'Get My Location';
+    }
+
+    function getCoordinatesFromLocation(location) {
+      // If we have current coordinates from GPS, use them
+      if (currentCoordinates) {
+        return currentCoordinates;
+      }
+      
+      // Fallback to predefined locations
+      const locationMap = {
+        'tel aviv': { lat: 32.0853, lon: 34.7818 },
+        'jerusalem': { lat: 31.7683, lon: 35.2137 },
+        'haifa': { lat: 32.7940, lon: 34.9896 },
+        'beer sheva': { lat: 31.2518, lon: 34.7913 },
+        'ashdod': { lat: 31.8044, lon: 34.6500 },
+        'netanya': { lat: 32.3328, lon: 34.8600 },
+        'petah tikva': { lat: 32.0871, lon: 34.8875 },
+        'rishon lezion': { lat: 31.9686, lon: 34.7983 },
+        'holon': { lat: 32.0167, lon: 34.7792 },
+        'bnei brak': { lat: 32.0807, lon: 34.8338 }
+      };
+      
+      const locationLower = location.toLowerCase();
+      for (const [key, coords] of Object.entries(locationMap)) {
+        if (locationLower.includes(key)) {
+          return coords;
+        }
+      }
+      
+      return { lat: 32.0853, lon: 34.7818 }; // Default to Tel Aviv
+    }
+
+    document.getElementById('incident-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      const form = document.getElementById('incident-form');
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      
+      try {
+        const formData = new FormData(form);
+        const location = formData.get('location').trim();
+        const incidentType = formData.get('incident-type').trim();
+        const contact = formData.get('contact').trim();
+        
+        if (!location || !incidentType) {
+          showAlert('Location and incident type are required', 'error');
+          return;
+        }
+        
+        // Get coordinates
+        const coords = getCoordinatesFromLocation(location);
+        const incidentName = location.split(',')[0].trim();
+        
+        // Create incident object
+        const incident = {
+          type: incidentType,
+          lat: coords.lat,
+          lon: coords.lon,
+          name: incidentName,
+          contact: contact,
+          timestamp: new Date().toISOString()
+        };
+        
+        // Save to local storage
+        const incidents = JSON.parse(localStorage.getItem('incidents') || '[]');
+        incidents.push(incident);
+        
+        // Sort incidents by type
+        const sortedIncidents = sortIncidentsByType(incidents);
+        localStorage.setItem('incidents', JSON.stringify(sortedIncidents));
+        
+        // Send to server to save to CSV
+        fetch('http://localhost:3001/submit-incident', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: incident.type,
+            lat: incident.lat,
+            lon: incident.lon,
+            name: incident.name
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showAlert('Report submitted successfully! Data saved to data.csv', 'success');
+          } else {
+            showAlert('Error: ' + data.error, 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error sending to server:', error);
+          showAlert('Report saved locally but failed to save to CSV. Please check if server is running.', 'error');
+        });
+        
+        form.reset();
+        document.getElementById('file-preview').innerHTML = '';
+        document.getElementById('coordinates-display').style.display = 'none';
+        currentCoordinates = null;
+        
+        console.log('Incident reported:', incident);
+        
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        showAlert('Error submitting report. Please try again.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Emergency Report';
+      }
+    });
+
+    // Drag and drop functionality
+    const fileUpload = document.querySelector('.file-upload');
+    
+    fileUpload.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#000';
+      this.style.backgroundColor = '#f0f0f0';
+    });
+    
+    fileUpload.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#ccc';
+      this.style.backgroundColor = '#f9f9f9';
+    });
+    
+    fileUpload.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#ccc';
+      this.style.backgroundColor = '#f9f9f9';
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        document.getElementById('photo').files = files;
+        previewImage(document.getElementById('photo'));
+      }
+    });
+  </script>
+</body>
+</html> 
