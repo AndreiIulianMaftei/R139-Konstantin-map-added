@@ -9,6 +9,7 @@ import sys
 import json
 from folium.plugins import HeatMap
 from flask import Flask, request, jsonify
+import re
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -180,5 +181,18 @@ if __name__ == '__main__':
       Map.add_child(getAttackLayer())
 
   Map.save(os.path.join(base_dir, 'map.html'))
+
+  with open('public/map.html', 'r', encoding='utf-8') as f:
+    html = f.read()
+    cleaned = re.sub(
+      r'<style>\s#map\s{[\s\S]?}\s</style>\s*',
+    '',
+      html
+    )
+
+  with open('public/map.html', 'w', encoding='utf-8') as f:
+    f.write(cleaned)
+
+  print(json.dumps({"status":"success","received":len(layers)}))
   print(json.dumps({"status":"success","received":len(layers)}))
   sys.exit(0)

@@ -676,16 +676,16 @@
         </div>
         <div class="layers-header">Available Layers</div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" id="embassyCheck" checked> Embassy Locations
+            <input type="checkbox" class="layer-checkbox" id="embassyCheck"> Embassy Locations
         </div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" id="heatCheck" checked> Danger Zones
+            <input type="checkbox" class="layer-checkbox" id="heatCheck"> Danger Zones
         </div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" id="safeCheck" checked> Safe Places
+            <input type="checkbox" class="layer-checkbox" id="safeCheck"> Safe Places
         </div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" id="attackCheck" checked> Attack Locations
+            <input type="checkbox" class="layer-checkbox" id="attackCheck"> Attack Locations
         </div>
     </div>
 
@@ -1115,6 +1115,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                document.getElementById('mapFrame').contentWindow.location.reload();
                 console.log('Server response:', data);
                 })
                 .catch(error => {
@@ -1126,6 +1127,43 @@
             refreshMap();
         });
 
+
+        fetch('map.html')
+            .then(res => res.text())
+            .then(html => {
+            if (html.includes('shield-heart')) {
+                document.getElementById('safeCheck').checked = true;
+            }
+            })
+        .catch(err => console.error('Fetch error:', err));
+
+        fetch('map.html')
+            .then(res => res.text())
+            .then(html => {
+            if (html.includes('heatLayer')) {
+                document.getElementById('heatCheck').checked = true;
+            }
+            })
+        .catch(err => console.error('Fetch error:', err));
+
+
+        fetch('map.html')
+            .then(res => res.text())
+            .then(html => {
+            if (html.includes('landmark')) {
+                document.getElementById('embassyCheck').checked = true;
+            }
+            })
+        .catch(err => console.error('Fetch error:', err));
+
+        fetch('map.html')
+            .then(res => res.text())
+            .then(html => {
+            if (html.includes('skull-crossbones')) {
+                document.getElementById('attackCheck').checked  = true;
+            }
+            })
+        .catch(err => console.error('Fetch error:', err));
         // Simulate XP window effects
         document.querySelectorAll('.xp-button').forEach(button => {
             button.addEventListener('mousedown', function() {

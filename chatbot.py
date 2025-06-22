@@ -861,7 +861,7 @@ Precise emergency response:""",
         
         city_df = self.df[self.df['city'].str.lower() == city_name.lower()]
         
-        safety_types = ['bunker', 'shelter', 'embassy']
+        safety_types = ['bunker', 'shelter', 'embassy', 'bank']
         danger_types = ['explosion', 'drone strike', 'car explosion', 'missile strike', 
                        'forces gathering', 'air strikes', 'soldiers spotted']
         
