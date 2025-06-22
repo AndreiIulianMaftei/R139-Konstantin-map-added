@@ -467,9 +467,7 @@
             display: flex;
             align-items: center;
             cursor: pointer;
-        }
-
-        .layer-item:hover {
+        }        .layer-item:hover {
             background: #e8e5e0;
         }
 
@@ -477,7 +475,98 @@
             margin-right: 6px;
         }
 
-        /* Responsive adjustments */
+        /* Embassy News Popup */
+        .embassy-news-popup {
+            position: fixed;
+            top: 80px;
+            left: 160px;
+            width: 350px;
+            max-height: 500px;
+            background: var(--xp-window-bg);
+            border: 2px outset var(--xp-gray);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .embassy-news-header {
+            background: var(--xp-titlebar-gradient);
+            color: white;
+            padding: 3px 6px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--xp-dark-gray);
+        }
+
+        .embassy-news-content {
+            padding: 8px;
+            max-height: 420px;
+            overflow-y: auto;
+            background: var(--xp-white);
+            margin: 4px;
+            border: 1px inset var(--xp-gray);
+        }
+
+        .news-item {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 8px;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .news-title {
+            font-weight: bold;
+            color: var(--xp-blue);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .news-date {
+            font-size: 9px;
+            color: var(--xp-dark-gray);
+            margin-bottom: 4px;
+        }
+
+        .news-content {
+            font-size: 11px;
+            line-height: 1.4;
+            color: var(--xp-black);
+        }
+
+        .news-priority {
+            display: inline-block;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 8px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .priority-high {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .priority-medium {
+            background: #ffa500;
+            color: white;
+        }
+
+        .priority-low {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .priority-info {
+            background: #2196F3;
+            color: white;
+        }        /* Responsive adjustments */
         @media (max-width: 768px) {
             .chat-panel {
                 width: 280px;
@@ -487,6 +576,22 @@
             .layers-panel {
                 width: 180px;
                 left: 10px;
+            }
+            
+            .embassy-news-popup {
+                width: 300px;
+                left: 10px;
+                top: 120px;
+                max-height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .embassy-news-popup {
+                width: 90vw;
+                left: 5vw;
+                top: 100px;
+                max-height: 350px;
             }
         }
     </style>
@@ -504,9 +609,9 @@
         </div>
 
         <!-- Toolbar -->
-        <div class="xp-toolbar">
-            <button class="xp-button" onclick="toggleLayers()">🗂️ Layers</button>
+        <div class="xp-toolbar">            <button class="xp-button" onclick="toggleLayers()">🗂️ Layers</button>
             <button class="xp-button" onclick="toggleChat()">💬 Chat</button>
+            <button class="xp-button" onclick="toggleEmbassyNews()">🏛️ Embassy</button>
             <div class="toolbar-separator"></div>
             <button class="xp-button">📍 Add Marker</button>
             <button class="xp-button">📏 Measure</button>
@@ -581,21 +686,86 @@
         </div>
         <div class="layer-item">
             <input type="checkbox" class="layer-checkbox" checked> Safe Places
-        </div>
-        <div class="layer-item">
+        </div>        <div class="layer-item">
             <input type="checkbox" class="layer-checkbox" checked> Attack Locations
         </div>
-    </div>    <script>
+    </div>
+
+    <!-- Embassy News Popup -->
+    <div class="embassy-news-popup" id="embassyNewsPopup">
+        <div class="embassy-news-header">
+            <div class="title">🏛️ Embassy News & Alerts</div>
+            <button class="control-btn" onclick="toggleEmbassyNews()">✕</button>
+        </div>
+        <div class="embassy-news-content" id="embassyNewsContent">
+            <div class="news-item">
+                <div class="news-priority priority-high">HIGH PRIORITY</div>
+                <div class="news-title">Security Alert: Heightened Threat Level</div>
+                <div class="news-date">June 22, 2025 - 14:30 UTC</div>
+                <div class="news-content">
+                    Embassy security has been elevated to Code Orange due to recent regional developments. All personnel are advised to remain vigilant and follow established security protocols. Avoid large gatherings and maintain communication with security office.
+                </div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-priority priority-medium">MEDIUM PRIORITY</div>
+                <div class="news-title">Consular Services Schedule Update</div>
+                <div class="news-date">June 22, 2025 - 09:15 UTC</div>
+                <div class="news-content">
+                    Due to ongoing security measures, consular services will operate on modified hours: Monday-Friday 08:00-15:00 local time. Emergency services remain available 24/7. Please schedule appointments in advance.
+                </div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-priority priority-info">INFORMATION</div>
+                <div class="news-title">Embassy Contact Information Update</div>
+                <div class="news-date">June 21, 2025 - 16:45 UTC</div>
+                <div class="news-content">
+                    Updated emergency contact numbers have been distributed. Main switchboard: +49-XXX-XXXXXX. Emergency hotline: +49-XXX-XXXXXX. These numbers are operational 24/7 for assistance.
+                </div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-priority priority-low">ROUTINE</div>
+                <div class="news-title">Weekly Security Briefing Available</div>
+                <div class="news-date">June 21, 2025 - 10:00 UTC</div>
+                <div class="news-content">
+                    This week's security briefing covers local transportation safety, recommended safe zones, and updated emergency procedures. All staff should review the briefing materials available on the internal portal.
+                </div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-priority priority-info">INFORMATION</div>
+                <div class="news-title">Medical Facilities Update</div>
+                <div class="news-date">June 20, 2025 - 13:20 UTC</div>
+                <div class="news-content">
+                    List of approved medical facilities has been updated. New partnerships with Regional Hospital and City Medical Center provide enhanced emergency care options. Medical evacuation procedures remain unchanged.
+                </div>
+            </div>
+            
+            <div class="news-item">
+                <div class="news-priority priority-high">HIGH PRIORITY</div>
+                <div class="news-title">Travel Advisory: Northern Districts</div>
+                <div class="news-date">June 19, 2025 - 18:30 UTC</div>
+                <div class="news-content">
+                    Avoid all non-essential travel to northern districts due to increased security risks. If travel is absolutely necessary, coordinate with security office and maintain regular check-ins every 2 hours.
+                </div>
+            </div>
+        </div>
+    </div><script>
         // Global functions that need to be accessible from onclick handlers
         function toggleChat() {
             const chatPanel = document.getElementById('chatPanel');
             chatPanel.classList.toggle('open');
-        }
-
-        function toggleLayers() {
+        }        function toggleLayers() {
             const layersPanel = document.getElementById('layersPanel');
             layersPanel.style.display = layersPanel.style.display === 'none' ? 'block' : 'none';
-        }        // Chat functionality
+        }
+
+        function toggleEmbassyNews() {
+            const embassyNewsPopup = document.getElementById('embassyNewsPopup');
+            embassyNewsPopup.style.display = embassyNewsPopup.style.display === 'none' ? 'block' : 'none';
+        }// Chat functionality
 
         function updateClock() {
             const now = new Date();
