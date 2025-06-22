@@ -98,7 +98,6 @@ class IsraelSafetyRAGBot:
             if 'type' in self.df.columns:
                 overall_types = self.df['type'].value_counts().to_dict()
                 rprint(Panel(f"📈 Overall data types: {overall_types}", style="cyan"))
-            
             return True
             
         except Exception as e:
@@ -111,16 +110,20 @@ class IsraelSafetyRAGBot:
         
         lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
         dlat = lat2 - lat1
-        dlon = lon2 - lon1        
+        dlon = lon2 - lon1
         a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
         c = 2 * math.asin(math.sqrt(a))
         
         return R * c
     
     def _create_content_by_type(self, row: pd.Series) -> str:
-        """Create content based on location type with intensity consideration"""
+        """Create content based on location type with intensity consideration and source file categorization"""
         city_name = row.get('city', row.get('name', 'Unknown Location'))
         source_file = row.get('source_file', 'data')
+        
+        # Determine if location is safe or dangerous based on source file
+        is_safe_source = source_file == 'bunkers.csv'
+        is_danger_source = source_file == 'heat.csv'
         
         # Handle intensity for dangerous locations
         intensity = row.get('ins', None)
@@ -141,85 +144,184 @@ class IsraelSafetyRAGBot:
             else:
                 danger_level = "LOW"
                 intensity_text = f"Low Threat Level: {intensity:.1f}/1.0 - Monitor Situation"
-        
-        # Enhanced content templates with intensity consideration
-        content_templates = {
-            'bunker': f"""
-            PROTECTIVE BUNKER - {city_name} ({row['lat']}, {row['lon']})
-            Maximum protection from rockets, explosions, and missile strikes. 
-            Reinforced concrete structure. Go here immediately during alerts.
-            Description: {row.get('desc', 'Emergency protective facility')}
-            Source: {source_file}
-            """,
-            'shelter': f"""
-            EMERGENCY SHELTER - {city_name} ({row['lat']}, {row['lon']})
-            Good protection during air raids and emergencies. Stay until all-clear signal.
-            Capacity for multiple people. Safe refuge during attacks.
-            Description: {row.get('desc', 'Emergency shelter facility')}
-            Source: {source_file}
-            """,
-            'embassy': f"""
-            DIPLOMATIC EMBASSY - {city_name} ({row['lat']}, {row['lon']})
-            Safe diplomatic facility with international protection.
-            Contact for citizen services, emergency assistance, and evacuation support.
-            Description: {row.get('desc', 'Diplomatic facility')}
-            Source: {source_file}
-            """,
-            'explosion': f"""
-            EXPLOSION INCIDENT - {city_name} ({row['lat']}, {row['lon']})
-            {intensity_text}
-            DANGER: Active explosion zone. AVOID this area completely.
-            Call 100 (Police), 101 (Medical), 102 (Fire) immediately.
-            Source: {source_file}
-            """,
-            'drone strike': f"""
-            DRONE STRIKE - {city_name} ({row['lat']}, {row['lon']})
-            {intensity_text}
-            DANGER: Aerial attack in progress. Seek immediate shelter.
-            Call 100 (Police) and find nearest bunker/shelter.
-            Source: {source_file}
-            """,
-            'car explosion': f"""
-            CAR EXPLOSION - {city_name} ({row['lat']}, {row['lon']})
-            {intensity_text}
-            DANGER: Vehicle explosion. EVACUATE 200m radius minimum.
-            Call 100 (Police), 101 (Medical), 102 (Fire).
-            Source: {source_file}
-            """,
-            'missile strike': f"""
-            MISSILE STRIKE - {city_name} ({row['lat']}, {row['lon']})
-            {intensity_text}
-            CRITICAL DANGER: Missile impact zone. EVACUATE IMMEDIATELY.
-            Call 100 (Police) and seek underground shelter.
-            Source: {source_file}
-            """,
-            'forces gathering': f"""
-            FORCES GATHERING - {city_name} ({row['lat']}, {row['lon']})
-            {intensity_text}
-            SECURITY ALERT: Military/hostile forces detected.
-            AVOID area and report to 100 (Police).
-            Source: {source_file}
-            """,
-            'air strikes': f"""
-            AIR STRIKES - {city_name} ({row['lat']}, {row['lon']})
-            {intensity_text}
-            CRITICAL DANGER: Aerial bombardment in progress.
-            Seek immediate underground shelter. Call 100 (Police).
-            Source: {source_file}
-            """,
-            'soldiers spotted': f"""
-            SOLDIERS SPOTTED - {city_name} ({row['lat']}, {row['lon']})
-            {intensity_text}
-            SECURITY ALERT: Armed personnel in area.
-            Exercise extreme caution. Monitor situation.
+          # Enhanced content templates with source file and intensity consideration
+        # Override categorization based on source file
+        if is_safe_source:
+            # Everything from bunkers.csv is treated as safe
+            content_templates = {
+                'bunker': f"""
+                PROTECTIVE BUNKER - {city_name} ({row['lat']}, {row['lon']})
+                Maximum protection from rockets, explosions, and missile strikes. 
+                Reinforced concrete structure. Go here immediately during alerts.
+                Description: {row.get('desc', 'Emergency protective facility')}
+                Source: {source_file} (VERIFIED SAFE LOCATION)
+                """,
+                'shelter': f"""
+                EMERGENCY SHELTER - {city_name} ({row['lat']}, {row['lon']})
+                Good protection during air raids and emergencies. Stay until all-clear signal.
+                Capacity for multiple people. Safe refuge during attacks.
+                Description: {row.get('desc', 'Emergency shelter facility')}
+                Source: {source_file} (VERIFIED SAFE LOCATION)
+                """,
+                'embassy': f"""
+                DIPLOMATIC EMBASSY - {city_name} ({row['lat']}, {row['lon']})
+                Safe diplomatic facility with international protection.
+                Contact for citizen services, emergency assistance, and evacuation support.
+                Description: {row.get('desc', 'Diplomatic facility')}
+                Source: {source_file} (VERIFIED SAFE LOCATION)
+                """
+            }
+            # Default safe location template for any type from bunkers.csv
+            default_template = f"""
+            SAFE LOCATION - {city_name} ({row['lat']}, {row['lon']})
+            Type: {row['type']} - Verified safe facility for protection
+            Description: {row.get('desc', 'Safe facility')}
+            Source: {source_file} (VERIFIED SAFE LOCATION)
+            """
+            
+        elif is_danger_source:
+            # Everything from heat.csv is treated as dangerous
+            content_templates = {
+                'explosion': f"""
+                EXPLOSION INCIDENT - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Active explosion zone. AVOID this area completely.
+                Call 100 (Police), 101 (Medical), 102 (Fire) immediately.
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'drone strike': f"""
+                DRONE STRIKE - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Aerial attack in progress. Seek immediate shelter.
+                Call 100 (Police) and find nearest bunker/shelter.
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'car explosion': f"""
+                CAR EXPLOSION - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Vehicle explosion. EVACUATE 200m radius minimum.
+                Call 100 (Police), 101 (Medical), 102 (Fire).
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'missile strike': f"""
+                MISSILE STRIKE - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                CRITICAL DANGER: Missile impact zone. EVACUATE IMMEDIATELY.
+                Call 100 (Police) and seek underground shelter.
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'forces gathering': f"""
+                FORCES GATHERING - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                SECURITY ALERT: Military/hostile forces detected.
+                AVOID area and report to 100 (Police).
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'air strikes': f"""
+                AIR STRIKES - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                CRITICAL DANGER: Aerial bombardment in progress.
+                Seek immediate underground shelter. Call 100 (Police).
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'soldiers spotted': f"""
+                SOLDIERS SPOTTED - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                SECURITY ALERT: Armed personnel in area.
+                Exercise extreme caution. Monitor situation.
+                Source: {source_file} (THREAT ZONE)
+                """
+            }
+            # Default danger template for any type from heat.csv
+            default_template = f"""
+            DANGER ZONE - {city_name} ({row['lat']}, {row['lon']})
+            Type: {row['type']} - {intensity_text if intensity_text else 'AVOID THIS AREA'}
+            DANGER: This location is flagged as unsafe. Stay away.
+            Source: {source_file} (THREAT ZONE)
+            """
+            
+        else:
+            # Original logic for other source files
+            content_templates = {
+                'bunker': f"""
+                PROTECTIVE BUNKER - {city_name} ({row['lat']}, {row['lon']})
+                Maximum protection from rockets, explosions, and missile strikes. 
+                Reinforced concrete structure. Go here immediately during alerts.
+                Description: {row.get('desc', 'Emergency protective facility')}
+                Source: {source_file}
+                """,
+                'shelter': f"""
+                EMERGENCY SHELTER - {city_name} ({row['lat']}, {row['lon']})
+                Good protection during air raids and emergencies. Stay until all-clear signal.
+                Capacity for multiple people. Safe refuge during attacks.
+                Description: {row.get('desc', 'Emergency shelter facility')}
+                Source: {source_file}
+                """,
+                'embassy': f"""
+                DIPLOMATIC EMBASSY - {city_name} ({row['lat']}, {row['lon']})
+                Safe diplomatic facility with international protection.
+                Contact for citizen services, emergency assistance, and evacuation support.
+                Description: {row.get('desc', 'Diplomatic facility')}
+                Source: {source_file}
+                """,
+                'explosion': f"""
+                EXPLOSION INCIDENT - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Active explosion zone. AVOID this area completely.
+                Call 100 (Police), 101 (Medical), 102 (Fire) immediately.
+                Source: {source_file}
+                """,
+                'drone strike': f"""
+                DRONE STRIKE - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Aerial attack in progress. Seek immediate shelter.
+                Call 100 (Police) and find nearest bunker/shelter.
+                Source: {source_file}
+                """,
+                'car explosion': f"""
+                CAR EXPLOSION - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Vehicle explosion. EVACUATE 200m radius minimum.
+                Call 100 (Police), 101 (Medical), 102 (Fire).
+                Source: {source_file}
+                """,
+                'missile strike': f"""
+                MISSILE STRIKE - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                CRITICAL DANGER: Missile impact zone. EVACUATE IMMEDIATELY.
+                Call 100 (Police) and seek underground shelter.
+                Source: {source_file}
+                """,
+                'forces gathering': f"""
+                FORCES GATHERING - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                SECURITY ALERT: Military/hostile forces detected.
+                AVOID area and report to 100 (Police).
+                Source: {source_file}
+                """,
+                'air strikes': f"""
+                AIR STRIKES - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                CRITICAL DANGER: Aerial bombardment in progress.
+                Seek immediate underground shelter. Call 100 (Police).
+                Source: {source_file}
+                """,
+                'soldiers spotted': f"""
+                SOLDIERS SPOTTED - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                SECURITY ALERT: Armed personnel in area.
+                Exercise extreme caution. Monitor situation.
+                Source: {source_file}
+                """
+            }
+            # Default template for other sources
+            default_template = f"""
+            LOCATION - {city_name} ({row['lat']}, {row['lon']})
+            Type: {row['type']} - {intensity_text if intensity_text else 'Location information available'}
             Source: {source_file}
             """
-        }
         
-        return content_templates.get(row['type'], f"""        LOCATION - {city_name} ({row['lat']}, {row['lon']})
-        Type: {row['type']} - {intensity_text if intensity_text else 'Location information available'}
-        Source: {source_file}
-        """)
+        return content_templates.get(row['type'], default_template)
     
     def create_documents_from_csv(self) -> List[Document]:
         """Convert CSV data into LangChain documents with enhanced city and context information"""
@@ -228,8 +330,19 @@ class IsraelSafetyRAGBot:
         for _, row in self.df.iterrows():
             content = self._create_content_by_type(row)
             city_name = row.get('city', row.get('name', 'Unknown'))
+              # Create comprehensive metadata for better retrieval
+            # Determine category based on both type and source file
+            source_file = row.get('source_file', 'data.csv')
+            is_safe_by_type = row['type'] in ['bunker', 'shelter', 'embassy']
+            is_safe_by_source = source_file == 'bunkers.csv'
+            is_danger_by_source = source_file == 'heat.csv'
             
-            # Create comprehensive metadata for better retrieval
+            # Categorize: bunkers.csv is always safe, heat.csv is always danger
+            if is_safe_by_source or (is_safe_by_type and not is_danger_by_source):
+                category = "safety"
+            else:
+                category = "danger"
+            
             metadata = {
                 "type": row['type'],
                 "city": city_name,
@@ -237,8 +350,8 @@ class IsraelSafetyRAGBot:
                 "lat": float(row['lat']),
                 "lon": float(row['lon']),
                 "source": row.get('source_file', 'israel_safety_database'),
-                "source_file": row.get('source_file', 'data.csv'),
-                "category": "safety" if row['type'] in ['bunker', 'shelter', 'embassy'] else "danger"
+                "source_file": source_file,
+                "category": category
             }
             
             # Add intensity data for threat locations
@@ -624,16 +737,18 @@ Precise emergency response:""",
                 break
             except Exception as e:
                 rprint(Panel(f"❌ System error: {e}\n🚨 Call emergency services!", style="red"))
-    
     def find_contextual_locations(self, user_lat: float, user_lon: float, 
                                  query_type: str = "safety") -> List[Dict]:
         """Find locations based on query context (safety vs danger)"""
         results = []
         
         if query_type.lower() in ["safety", "shelter", "bunker", "embassy", "protection", "bank"]:
-            # Find safety locations (bunkers, shelters, embassies)
+            # Find safety locations (bunkers, shelters, embassies + all from bunkers.csv)
             safety_types = ['bunker', 'shelter', 'embassy']
-            filtered_df = self.df[self.df['type'].isin(safety_types)]
+            filtered_df = self.df[
+                (self.df['type'].isin(safety_types)) | 
+                (self.df['source_file'] == 'bunkers.csv')
+            ]
             for _, row in filtered_df.iterrows():
                 distance = self.calculate_distance(user_lat, user_lon, row['lat'], row['lon'])
                 results.append({
@@ -645,12 +760,14 @@ Precise emergency response:""",
                     'category': 'safety',
                     'description': row.get('desc', 'Safety facility')
                 })
-        
         elif query_type.lower() in ["danger", "threat", "risk", "avoid", "hazard"]:
-            # Find dangerous locations with intensity ratings
+            # Find dangerous locations with intensity ratings (including all from heat.csv)
             danger_types = ['explosion', 'drone strike', 'car explosion', 'missile strike', 
                           'forces gathering', 'air strikes', 'soldiers spotted']
-            filtered_df = self.df[self.df['type'].isin(danger_types)]
+            filtered_df = self.df[
+                (self.df['type'].isin(danger_types)) | 
+                (self.df['source_file'] == 'heat.csv')
+            ]
             for _, row in filtered_df.iterrows():
                 distance = self.calculate_distance(user_lat, user_lon, row['lat'], row['lon'])
                 intensity = row.get('ins', 0)
@@ -675,11 +792,21 @@ Precise emergency response:""",
                     'intensity': intensity,
                     'danger_level': danger_level
                 })
-        
-        else:            # General query - return mixed results
+        else:
+            # General query - return mixed results with source file consideration
             for _, row in self.df.iterrows():
                 distance = self.calculate_distance(user_lat, user_lon, row['lat'], row['lon'])
-                category = 'safety' if row['type'] in ['bunker', 'shelter', 'embassy'] else 'danger'
+                
+                # Determine category based on source file and type
+                source_file = row.get('source_file', 'data.csv')
+                is_safe_by_type = row['type'] in ['bunker', 'shelter', 'embassy']
+                is_safe_by_source = source_file == 'bunkers.csv'
+                is_danger_by_source = source_file == 'heat.csv'
+                
+                if is_safe_by_source or (is_safe_by_type and not is_danger_by_source):
+                    category = 'safety'
+                else:
+                    category = 'danger'
                 
                 result = {
                     'type': row['type'],
@@ -740,7 +867,6 @@ Precise emergency response:""",
         
         safety_facilities = []
         threat_zones = []
-        
         for _, row in city_df.iterrows():
             location_data = {
                 'type': row['type'],
@@ -750,9 +876,16 @@ Precise emergency response:""",
                 'description': row.get('desc', '')
             }
             
-            if row['type'] in safety_types:
+            # Determine category based on source file and type
+            source_file = row.get('source_file', 'data.csv')
+            is_safe_by_type = row['type'] in safety_types
+            is_safe_by_source = source_file == 'bunkers.csv'
+            is_danger_by_source = source_file == 'heat.csv'
+            
+            if is_safe_by_source or (is_safe_by_type and not is_danger_by_source):
                 safety_facilities.append(location_data)
-            elif row['type'] in danger_types:
+            else:
+                # Treat as threat zone
                 location_data['intensity'] = row.get('ins', 0)
                 if location_data['intensity'] >= 0.8:
                     location_data['threat_level'] = 'CRITICAL'
