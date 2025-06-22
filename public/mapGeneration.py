@@ -18,7 +18,7 @@ def getEmbassyLayer():
   embassyMarkers = folium.FeatureGroup(name='Embassies')
     
   for _, row in embassyLocationsPD.iterrows():
-    embassyLocation = {'location': (row['Latitude'],row['Longitude']), 'info': row['Info']}
+    embassyLocation = {'location': (row['lat'],row['lon']), 'info': row['desc']}
     embassyLocations.append(embassyLocation)
     
   for embassy in embassyLocations:
@@ -48,7 +48,7 @@ def getBunkerLayer():
   bunkerMarkers = folium.FeatureGroup(name='Bunkers')
     
   for _, row in bunkerLocationsPD.iterrows():
-    bunkerLocation = {'location': (row['Latitude'],row['Longitude']), 'info': row['Info']}
+    bunkerLocation = {'location': (row['lat'],row['lon']), 'info': row['type']}
     bunkerLocations.append(bunkerLocation)
     
   for bunker in bunkerLocations:
@@ -77,7 +77,7 @@ def getHeatLayer():
   heatLocations = []
     
   for _, row in heatLocationsPD.iterrows():
-    heatLocations.append([row['Latitude'],row['Longitude'],row['Intensity']])
+    heatLocations.append([row['lat'],row['lon'],row['ins']])
 
   heatMarkers = folium.FeatureGroup(name='Heatmap')
   HeatMap(heatLocations, radius=25, blur=25).add_to(heatMarkers)
@@ -90,7 +90,7 @@ def getAttackLayer():
   attackMarkers = folium.FeatureGroup(name='Attacks')
 
   for _, row in attackLocationsPD.iterrows():
-    attackLocation = {'location': (row['Latitude'],row['Longitude']), 'info': row['Info']}
+    attackLocation = {'location': (row['lat'],row['lon']), 'info': row['type']}
     attackLocations.append(attackLocation)
     
   for attack in attackLocations:
@@ -117,14 +117,14 @@ def getAttackLayer():
     
 def addBunker(latitute, longitute, info):
   bunkerLocationPD = pd.read_csv(os.path.join(base_dir, 'bunkers.csv'))
-  newBunkerLocation = {'Latitude': latitute, 'Longitude': longitute, 'Info': info}
+  newBunkerLocation = {'lat': latitute, 'lon': longitute, 'desc': info}
   bunkerLocationPD = pd.concat([bunkerLocationPD, pd.DataFrame([newBunkerLocation])], ignore_index=True)
   bunkerLocationPD.to_csv('bunkers.csv', index=False)
 
 
 def addHeat(latitute, longitute, intensity, info):
   heatLocationPD = pd.read_csv(os.path.join(base_dir, 'heat.csv'))
-  newHeatLocation = {'Latitude': latitute, 'Longitude': longitute, 'Intensity': intensity, 'Info': info}
+  newHeatLocation = {'lat': latitute, 'lon': longitute, 'ins': intensity, 'type': info}
   heatLocationPD = pd.concat([heatLocationPD, pd.DataFrame([newHeatLocation])], ignore_index=True)
   heatLocationPD.to_csv('heat.csv', index=False)
 

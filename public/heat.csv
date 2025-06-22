@@ -1,5 +1,13 @@
-Latitude,Longitude,Intensity,Info
-32.3,35.2,0.1,Bomb
-32.2,35.1,0.5,Car Explosion
-32.1,35,0.6,Drone Attackkw4e flaweh lghasdk guoasdh giadh daj gbadfgh adfg hkdfj gasdhig lasdlg adfjg ldf
-32,34.9,0.7,Air Strike
+lat,lon,ins,type,name
+31.5051,34.4508,0.7,Explosion,Gaza
+31.42,34.3855,0.5,Drone Strike,Maghazi
+31.3442,34.3202,0.5,Car Explosion,Khan Yunis
+31.5282,34.4462,0.8,Missile Strike,Gaza
+31.6204,34.7502,0.8,Forces Gathering,Kiryat Gat
+31.7937,34.6474,0.6,Air Strikes,Ashdod
+32.0644,34.8088,0.3,Soldiers Spotted,Tel Aviv
+32.0357,34.7482,0.7,Missile Strike,Tel Aviv
+32.0718,34.8259,0.4,Car Explosion,Ramat Gan
+32.0146,34.7898,0.2,Knife Attack,Holon
+31.7875,35.2253,0.3,Street Brawl,Jerusalem
+31.8026,35.1434,0.7,Gun Fight,Jerusalem
