@@ -4,12 +4,16 @@
   "private": true,
   "dependencies": {
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
+    "csv-writer": "^1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"node src/server.js\"",
+    "start:report": "node server.js",
+    "start:all": "concurrently \"react-scripts start\" \"node src/server.js\" \"node server.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
