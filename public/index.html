@@ -386,9 +386,6 @@
         </div>
         <div class="layers-header">Available Layers</div>
         <div class="layer-item">
-            <input type="checkbox" class="layer-checkbox" checked> Satellite Imagery
-        </div>
-        <div class="layer-item">
             <input type="checkbox" class="layer-checkbox" checked> Embassy Locations
         </div>
         <div class="layer-item">
@@ -400,7 +397,9 @@
         <div class="layer-item">
             <input type="checkbox" class="layer-checkbox" checked> Attack Locations
         </div>
-    </div>    <script>
+    </div>
+
+    <script>
         // Global functions that need to be accessible from onclick handlers
         function toggleChat() {
             const chatPanel = document.getElementById('chatPanel');
@@ -416,6 +415,41 @@
         function getCurrentTime() {
             return new Date().toLocaleTimeString().slice(0, 5);
         }
+
+        function refreshMap() {
+            const layerItems = layersPanel.querySelectorAll('.layer-item');
+            const layers = [];
+
+            for (let i = 0; i < layerItems.length; i++) {
+                const item = layerItems[i];
+                const checkbox = item.querySelector('.layer-checkbox');
+                const label = item.textContent.trim();
+
+                layers.push({
+                    name: label,
+                    checked: checkbox.checked
+                });
+            }
+
+            fetch('http://localhost:5000/update-map', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(layers)
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Server response:', data);
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('refreshButton').addEventListener('click', () => {
+            refreshMap();
+        });
         
         function parseMarkdown(text) {
             // Convert markdown to HTML
