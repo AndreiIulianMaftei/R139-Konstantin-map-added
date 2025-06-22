@@ -111,76 +111,180 @@ class IsraelSafetyRAGBot:
         
         lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
         dlat = lat2 - lat1
-        dlon = lon2 - lon1
-        
+        dlon = lon2 - lon1        
         a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
         c = 2 * math.asin(math.sqrt(a))
         
         return R * c
     
     def _create_content_by_type(self, row: pd.Series) -> str:
-        """Create content based on location type"""
+        """Create content based on location type with intensity consideration"""
         city_name = row.get('city', row.get('name', 'Unknown Location'))
         source_file = row.get('source_file', 'data')
         
+        # Handle intensity for dangerous locations
+        intensity = row.get('ins', None)
+        intensity_text = ""
+        danger_level = "UNKNOWN"
+        
+        if intensity is not None:
+            intensity = float(intensity)
+            if intensity >= 0.8:
+                danger_level = "EXTREME"
+                intensity_text = f"CRITICAL THREAT LEVEL: {intensity:.1f}/1.0 - EVACUATE IMMEDIATELY"
+            elif intensity >= 0.6:
+                danger_level = "HIGH" 
+                intensity_text = f"High Threat Level: {intensity:.1f}/1.0 - AVOID AREA"
+            elif intensity >= 0.4:
+                danger_level = "MODERATE"
+                intensity_text = f"Moderate Threat Level: {intensity:.1f}/1.0 - Exercise Caution"
+            else:
+                danger_level = "LOW"
+                intensity_text = f"Low Threat Level: {intensity:.1f}/1.0 - Monitor Situation"
+        
+        # Enhanced content templates with intensity consideration
         content_templates = {
             'bunker': f"""
-            BUNKER - {city_name} ({row['lat']}, {row['lon']})
-            Maximum protection from rockets/explosions. Go here during alerts.
+            PROTECTIVE BUNKER - {city_name} ({row['lat']}, {row['lon']})
+            Maximum protection from rockets, explosions, and missile strikes. 
+            Reinforced concrete structure. Go here immediately during alerts.
+            Description: {row.get('desc', 'Emergency protective facility')}
             Source: {source_file}
             """,
             'shelter': f"""
-            SHELTER - {city_name} ({row['lat']}, {row['lon']})
-            Good protection during air raids. Stay until all-clear.
+            EMERGENCY SHELTER - {city_name} ({row['lat']}, {row['lon']})
+            Good protection during air raids and emergencies. Stay until all-clear signal.
+            Capacity for multiple people. Safe refuge during attacks.
+            Description: {row.get('desc', 'Emergency shelter facility')}
             Source: {source_file}
             """,
             'embassy': f"""
-            EMBASSY - {city_name} ({row['lat']}, {row['lon']})
-            Safe diplomatic facility. Contact for citizen services and emergency assistance.
+            DIPLOMATIC EMBASSY - {city_name} ({row['lat']}, {row['lon']})
+            Safe diplomatic facility with international protection.
+            Contact for citizen services, emergency assistance, and evacuation support.
+            Description: {row.get('desc', 'Diplomatic facility')}
             Source: {source_file}
             """,
-            'heat': f"""
-            HEAT ZONE - {city_name} ({row['lat']}, {row['lon']})
-            High temperature area. Risk of heat-related health issues. Stay hydrated, seek shade.
+            'explosion': f"""
+            EXPLOSION INCIDENT - {city_name} ({row['lat']}, {row['lon']})
+            {intensity_text}
+            DANGER: Active explosion zone. AVOID this area completely.
+            Call 100 (Police), 101 (Medical), 102 (Fire) immediately.
             Source: {source_file}
             """,
-            'shooting': f"""
-            SHOOTING ALERT - {city_name} ({row['lat']}, {row['lon']})
-            AVOID AREA. Call 100 (Police). Very dangerous situation
+            'drone strike': f"""
+            DRONE STRIKE - {city_name} ({row['lat']}, {row['lon']})
+            {intensity_text}
+            DANGER: Aerial attack in progress. Seek immediate shelter.
+            Call 100 (Police) and find nearest bunker/shelter.
             Source: {source_file}
             """,
-            'bomb': f"""
-            BOMB ALERT - {city_name} ({row['lat']}, {row['lon']})
-            EVACUATE 500m+. Call 100 (Police). Extremely dangerous situation
+            'car explosion': f"""
+            CAR EXPLOSION - {city_name} ({row['lat']}, {row['lon']})
+            {intensity_text}
+            DANGER: Vehicle explosion. EVACUATE 200m radius minimum.
+            Call 100 (Police), 101 (Medical), 102 (Fire).
+            Source: {source_file}
+            """,
+            'missile strike': f"""
+            MISSILE STRIKE - {city_name} ({row['lat']}, {row['lon']})
+            {intensity_text}
+            CRITICAL DANGER: Missile impact zone. EVACUATE IMMEDIATELY.
+            Call 100 (Police) and seek underground shelter.
+            Source: {source_file}
+            """,
+            'forces gathering': f"""
+            FORCES GATHERING - {city_name} ({row['lat']}, {row['lon']})
+            {intensity_text}
+            SECURITY ALERT: Military/hostile forces detected.
+            AVOID area and report to 100 (Police).
+            Source: {source_file}
+            """,
+            'air strikes': f"""
+            AIR STRIKES - {city_name} ({row['lat']}, {row['lon']})
+            {intensity_text}
+            CRITICAL DANGER: Aerial bombardment in progress.
+            Seek immediate underground shelter. Call 100 (Police).
+            Source: {source_file}
+            """,
+            'soldiers spotted': f"""
+            SOLDIERS SPOTTED - {city_name} ({row['lat']}, {row['lon']})
+            {intensity_text}
+            SECURITY ALERT: Armed personnel in area.
+            Exercise extreme caution. Monitor situation.
             Source: {source_file}
             """
         }
         
-        return content_templates.get(row['type'], f"""
-        LOCATION - {city_name} ({row['lat']}, {row['lon']})
-        Type: {row['type']} - Location information available
+        return content_templates.get(row['type'], f"""        LOCATION - {city_name} ({row['lat']}, {row['lon']})
+        Type: {row['type']} - {intensity_text if intensity_text else 'Location information available'}
         Source: {source_file}
         """)
     
     def create_documents_from_csv(self) -> List[Document]:
-        """Convert CSV data into LangChain documents"""
+        """Convert CSV data into LangChain documents with enhanced city and context information"""
         documents = []
         
         for _, row in self.df.iterrows():
             content = self._create_content_by_type(row)
+            city_name = row.get('city', row.get('name', 'Unknown'))
             
-            doc = Document(
-                page_content=content,
-                metadata={
-                    "type": row['type'],
-                    "city": row.get('city', row.get('name', 'Unknown')),
-                    "lat": float(row['lat']),
-                    "lon": float(row['lon']),
-                    "source": row.get('source_file', 'israel_safety_database'),
-                    "source_file": row.get('source_file', 'data.csv')
-                }
+            # Create comprehensive metadata for better retrieval
+            metadata = {
+                "type": row['type'],
+                "city": city_name,
+                "city_lower": city_name.lower(),
+                "lat": float(row['lat']),
+                "lon": float(row['lon']),
+                "source": row.get('source_file', 'israel_safety_database'),
+                "source_file": row.get('source_file', 'data.csv'),
+                "category": "safety" if row['type'] in ['bunker', 'shelter', 'embassy'] else "danger"
+            }
+            
+            # Add intensity data for threat locations
+            if 'ins' in row and pd.notna(row['ins']):
+                intensity = float(row['ins'])
+                metadata["intensity"] = intensity
+                metadata["threat_level"] = (
+                    "CRITICAL" if intensity >= 0.8 else
+                    "HIGH" if intensity >= 0.6 else
+                    "MODERATE" if intensity >= 0.4 else
+                    "LOW"
+                )
+            
+            # Create multiple document variations for better matching
+            base_doc = Document(page_content=content, metadata=metadata)
+            documents.append(base_doc)
+            
+            # Create city-specific document for better city queries
+            city_content = f"""
+            CITY: {city_name}
+            FACILITY TYPE: {row['type'].upper()}
+            COORDINATES: {row['lat']}, {row['lon']}
+            {content}
+            """
+            
+            city_doc = Document(
+                page_content=city_content,
+                metadata={**metadata, "document_type": "city_specific"}
             )
-            documents.append(doc)
+            documents.append(city_doc)
+            
+            # Create protection-specific documents for safety facilities
+            if row['type'] in ['bunker', 'shelter', 'embassy']:
+                protection_content = f"""
+                PROTECTION AVAILABLE IN {city_name}:
+                TYPE: {row['type'].upper()} - Safe facility for emergency protection
+                LOCATION: {city_name} at coordinates {row['lat']}, {row['lon']}
+                USE FOR: Emergency shelter, rocket alerts, air raids, dangerous situations
+                {content}
+                """
+                
+                protection_doc = Document(
+                    page_content=protection_content,
+                    metadata={**metadata, "document_type": "protection_focused"}
+                )
+                documents.append(protection_doc)
         
         return documents
     
@@ -215,9 +319,7 @@ class IsraelSafetyRAGBot:
                 # Check if it's a dimension mismatch error
                 if "dimension" in str(vectorstore_error).lower():
                     rprint(Panel(f"⚠️ Dimension mismatch detected: {vectorstore_error}", style="yellow"))
-                    rprint(Panel("🔄 Cleaning database and recreating with new embedding dimensions...", style="yellow"))
-                    
-                    # Clean database and try again
+                    rprint(Panel("🔄 Cleaning database and recreating with new embedding dimensions...", style="yellow"))                    # Clean database and try again
                     if self.clean_database(confirm=False):  # Auto-confirm cleanup
                         self.vectorstore = Chroma.from_documents(
                             documents=documents,
@@ -237,32 +339,47 @@ class IsraelSafetyRAGBot:
             return False
     
     def setup_qa_chain(self) -> bool:
-        """Setup the RAG QA chain"""
+        """Setup the RAG QA chain with enhanced contextual prompting"""
         try:
             llm = ChatOllama(model=self.model_name, temperature=0.1)
             custom_prompt = PromptTemplate(
-                template="""You are an AI emergency assistant for Israel safety. Provide IMMEDIATE, CLEAR, and ACTIONABLE responses.
+                template="""You are an AI emergency assistant for Israel safety. Analyze the user's question carefully and provide precise, actionable responses.
 
-INSTRUCTIONS:
-- Prioritize SAFETY above all else
-- Use SIMPLE markdown formatting ONLY: bold text with single asterisks *like this*
-- DO NOT use double asterisks, complex formatting, or special characters
-- Start important sections with simple bullet points using -
-- Include emergency contact numbers when relevant
-- Be calm but supportive
-- Include relevant location information
-- Keep responses clear and readable
+QUERY ANALYSIS INSTRUCTIONS:
+1. CITY IDENTIFICATION: If user mentions a specific city name, prioritize information for that exact city
+2. PROTECTION REQUESTS: If user asks about safety, shelter, bunkers, or protection, focus on safety facilities
+3. ALWAYS INCLUDE: Both safety facilities AND nearby threats to avoid in every response
 
-FORMATTING RULES:
+RESPONSE STRUCTURE - ALWAYS FOLLOW THIS FORMAT:
+
+*SAFETY FACILITIES IN [CITY]:*
+[List specific bunkers, shelters, embassies in the requested city with GPS coordinates]
+
+*THREAT ZONES TO AVOID NEARBY:*
+[List dangerous areas with intensity levels - ALWAYS include this section]
+
+*EMERGENCY GUIDANCE:*
+[Specific action steps based on the query]
+
+CRITICAL RULES:
+- If user mentions a city, be PRECISE - only show facilities in that exact city
+- ALWAYS show both safety facilities AND threat zones in every response  
+- Use intensity ratings: CRITICAL (0.8+), HIGH (0.6-0.8), MODERATE (0.4-0.6), LOW (<0.4)
+- Include GPS coordinates for all locations
+- Use simple markdown: *text* for emphasis only
+- Prioritize the most relevant information first
+-keep markdown simple and clear
+
+FORMATTING:
 - Use *text* for emphasis (single asterisks only)
-- Use simple bullet points with -
-- Use plain text for most content
-- NO fancy symbols, emojis, or complex markdown
+- Use - for bullet points  
+- Include GPS coordinates as (lat, lon)
+- Keep responses clear and actionable
 
 Context: {context}
 Question: {question}
 
-Emergency response:""",
+Precise emergency response:""",
                 input_variables=["context", "question"]
             )
             
@@ -271,13 +388,13 @@ Emergency response:""",
                 chain_type="stuff",
                 retriever=self.vectorstore.as_retriever(
                     search_type="similarity",
-                    search_kwargs={"k": 5}
+                    search_kwargs={"k": 8}  # Increased to get more context
                 ),
                 chain_type_kwargs={"prompt": custom_prompt},
                 return_source_documents=True
             )
             
-            rprint(Panel("✅ Emergency QA system ready!", style="green"))
+            rprint(Panel("✅ Enhanced Emergency QA system ready!", style="green"))
             return True
             
         except Exception as e:
@@ -308,30 +425,74 @@ Emergency response:""",
                     'lat': row['lat'],
                     'lon': row['lon'],
                     'distance_km': round(distance, 2)
-                }
-        
+                }        
         return nearest_location
+    
     def get_emergency_response(self, question: str) -> str:
-        """Get emergency response using RAG"""
+        """Get emergency response using enhanced RAG with city precision and threat awareness"""
         try:
             with console.status("[bold red]🚨 Processing emergency query...", spinner="dots"):
                 result = self.qa_chain({"query": question})
             
             response = result['result']
             
-            # Add source information with simple formatting
+            # Extract city from question for enhanced responses
+            question_lower = question.lower()
+            mentioned_cities = []
+            if self.df is not None:
+                for city in self.df['city'].dropna().unique():
+                    if city.lower() in question_lower:
+                        mentioned_cities.append(city)
+            
+            # Enhance response with specific location data
             if result.get('source_documents'):
-                response += "\n\n*Relevant Locations:*\n"
-                for i, doc in enumerate(result['source_documents'][:3], 1):
+                safety_docs = []
+                threat_docs = []
+                
+                for doc in result['source_documents']:
                     metadata = doc.metadata
-                    response += f"- {metadata['type'].upper()} in {metadata['city']} "
-                    response += f"(GPS: {metadata['lat']}, {metadata['lon']})\n"
+                    if metadata.get('category') == 'safety':
+                        safety_docs.append(metadata)
+                    elif metadata.get('category') == 'danger':
+                        threat_docs.append(metadata)
+                
+                # Always add structured location information
+                response += "\n\n*LOCATION INTELLIGENCE:*\n"
+                
+                # Safety facilities section
+                if safety_docs:
+                    response += "\n*Available Protection:*\n"
+                    for i, doc in enumerate(safety_docs[:3], 1):
+                        response += f"{i}. *{doc['type'].upper()}* - {doc['city']}\n"
+                        response += f"   GPS: {doc['lat']}, {doc['lon']}\n"
+                
+                # Threat zones section - ALWAYS include if available
+                if threat_docs:
+                    response += "\n*Threat Zones to Avoid:*\n"
+                    for i, doc in enumerate(threat_docs[:3], 1):
+                        threat_level = doc.get('threat_level', 'UNKNOWN')
+                        intensity = doc.get('intensity', 0)
+                        response += f"{i}. *{threat_level}* - {doc['type']} in {doc['city']}\n"
+                        response += f"   Intensity: {intensity:.1f}/1.0 | GPS: {doc['lat']}, {doc['lon']}\n"
+                
+                # Add city-specific guidance if city was mentioned
+                if mentioned_cities:
+                    city_name = mentioned_cities[0]  # Use first mentioned city
+                    city_safety = [doc for doc in safety_docs if doc['city'].lower() == city_name.lower()]
+                    city_threats = [doc for doc in threat_docs if doc['city'].lower() == city_name.lower()]
+                    
+                    response += f"\n*Specific to {city_name}:*\n"
+                    if city_safety:
+                        response += f"- {len(city_safety)} safety facilities available\n"
+                    if city_threats:
+                        avg_intensity = sum(doc.get('intensity', 0) for doc in city_threats) / len(city_threats)
+                        response += f"- {len(city_threats)} threat zones (avg intensity: {avg_intensity:.1f})\n"
             
             return response
             
         except Exception as e:
-            return (f"Emergency system error: {e}\n\n"
-                   "IMMEDIATE ACTION: Call emergency services 100 (Police), 101 (Medical)")
+            return (f"❌ Emergency system error: {e}\n\n"
+                   "🚨 IMMEDIATE ACTION: Call emergency services 100 (Police), 101 (Medical)")
     
     def show_emergency_help(self):
         """Show emergency commands and help"""
@@ -463,7 +624,152 @@ Emergency response:""",
                 break
             except Exception as e:
                 rprint(Panel(f"❌ System error: {e}\n🚨 Call emergency services!", style="red"))
-
+    
+    def find_contextual_locations(self, user_lat: float, user_lon: float, 
+                                 query_type: str = "safety") -> List[Dict]:
+        """Find locations based on query context (safety vs danger)"""
+        results = []
+        
+        if query_type.lower() in ["safety", "shelter", "bunker", "embassy", "protection", "bank"]:
+            # Find safety locations (bunkers, shelters, embassies)
+            safety_types = ['bunker', 'shelter', 'embassy']
+            filtered_df = self.df[self.df['type'].isin(safety_types)]
+            for _, row in filtered_df.iterrows():
+                distance = self.calculate_distance(user_lat, user_lon, row['lat'], row['lon'])
+                results.append({
+                    'type': row['type'],
+                    'name': row.get('name', row.get('city', 'Unknown')),
+                    'lat': row['lat'],
+                    'lon': row['lon'],
+                    'distance_km': round(distance, 2),
+                    'category': 'safety',
+                    'description': row.get('desc', 'Safety facility')
+                })
+        
+        elif query_type.lower() in ["danger", "threat", "risk", "avoid", "hazard"]:
+            # Find dangerous locations with intensity ratings
+            danger_types = ['explosion', 'drone strike', 'car explosion', 'missile strike', 
+                          'forces gathering', 'air strikes', 'soldiers spotted']
+            filtered_df = self.df[self.df['type'].isin(danger_types)]
+            for _, row in filtered_df.iterrows():
+                distance = self.calculate_distance(user_lat, user_lon, row['lat'], row['lon'])
+                intensity = row.get('ins', 0)
+                
+                # Classify danger level
+                if intensity >= 0.8:
+                    danger_level = "CRITICAL"
+                elif intensity >= 0.6:
+                    danger_level = "HIGH"
+                elif intensity >= 0.4:
+                    danger_level = "MODERATE"
+                else:
+                    danger_level = "LOW"
+                
+                results.append({
+                    'type': row['type'],
+                    'name': row.get('name', row.get('city', 'Unknown')),
+                    'lat': row['lat'],
+                    'lon': row['lon'],
+                    'distance_km': round(distance, 2),
+                    'category': 'danger',
+                    'intensity': intensity,
+                    'danger_level': danger_level
+                })
+        
+        else:            # General query - return mixed results
+            for _, row in self.df.iterrows():
+                distance = self.calculate_distance(user_lat, user_lon, row['lat'], row['lon'])
+                category = 'safety' if row['type'] in ['bunker', 'shelter', 'embassy'] else 'danger'
+                
+                result = {
+                    'type': row['type'],
+                    'name': row.get('name', row.get('city', 'Unknown')),
+                    'lat': row['lat'],
+                    'lon': row['lon'],
+                    'distance_km': round(distance, 2),
+                    'category': category
+                }
+                
+                if category == 'danger':
+                    intensity = row.get('ins', 0)
+                    result['intensity'] = intensity
+                    if intensity >= 0.8:
+                        result['danger_level'] = "CRITICAL"
+                    elif intensity >= 0.6:
+                        result['danger_level'] = "HIGH"
+                    elif intensity >= 0.4:
+                        result['danger_level'] = "MODERATE"
+                    else:
+                        result['danger_level'] = "LOW"
+                else:
+                    result['description'] = row.get('desc', 'Safety facility')
+                
+                results.append(result)
+        
+        # Sort by distance
+        results.sort(key=lambda x: x['distance_km'])
+        return results[:10]  # Return top 10 closest
+    
+    def extract_city_from_query(self, question: str) -> List[str]:
+        """Extract city names mentioned in the user query"""
+        question_lower = question.lower()
+        mentioned_cities = []
+        
+        if self.df is not None:
+            # Check for exact city matches
+            for city in self.df['city'].dropna().unique():
+                city_lower = city.lower()
+                if city_lower in question_lower:
+                    # Ensure it's a word boundary match, not part of another word
+                    import re
+                    if re.search(r'\b' + re.escape(city_lower) + r'\b', question_lower):
+                        mentioned_cities.append(city)
+        
+        return mentioned_cities
+    
+    def get_city_specific_data(self, city_name: str) -> Dict:
+        """Get all safety and threat data for a specific city"""
+        if self.df is None:
+            return {"safety": [], "threats": []}
+        
+        city_df = self.df[self.df['city'].str.lower() == city_name.lower()]
+        
+        safety_types = ['bunker', 'shelter', 'embassy']
+        danger_types = ['explosion', 'drone strike', 'car explosion', 'missile strike', 
+                       'forces gathering', 'air strikes', 'soldiers spotted']
+        
+        safety_facilities = []
+        threat_zones = []
+        
+        for _, row in city_df.iterrows():
+            location_data = {
+                'type': row['type'],
+                'name': row.get('name', row.get('city', 'Unknown')),
+                'lat': row['lat'],
+                'lon': row['lon'],
+                'description': row.get('desc', '')
+            }
+            
+            if row['type'] in safety_types:
+                safety_facilities.append(location_data)
+            elif row['type'] in danger_types:
+                location_data['intensity'] = row.get('ins', 0)
+                if location_data['intensity'] >= 0.8:
+                    location_data['threat_level'] = 'CRITICAL'
+                elif location_data['intensity'] >= 0.6:
+                    location_data['threat_level'] = 'HIGH'
+                elif location_data['intensity'] >= 0.4:
+                    location_data['threat_level'] = 'MODERATE'
+                else:
+                    location_data['threat_level'] = 'LOW'
+                threat_zones.append(location_data)
+        
+        return {
+            "safety": safety_facilities,
+            "threats": threat_zones,
+            "city": city_name
+        }
+    
 def main():
     try:
         bot = IsraelSafetyRAGBot(model_name="gemma3:1b")

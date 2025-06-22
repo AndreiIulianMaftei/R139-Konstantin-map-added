@@ -1,13 +1,13 @@
 lat,lon,ins,type,name
-31.5051,34.4508,0.7,Explosion,Gaza
-31.42,34.3855,0.5,Drone Strike,Maghazi
-31.3442,34.3202,0.5,Car Explosion,Khan Yunis
-31.5282,34.4462,0.8,Missile Strike,Gaza
-31.6204,34.7502,0.8,Forces Gathering,Kiryat Gat
-31.7937,34.6474,0.6,Air Strikes,Ashdod
-32.0644,34.8088,0.3,Soldiers Spotted,Tel Aviv
-32.0357,34.7482,0.7,Missile Strike,Tel Aviv
-32.0718,34.8259,0.4,Car Explosion,Ramat Gan
-32.0146,34.7898,0.2,Knife Attack,Holon
-31.7875,35.2253,0.3,Street Brawl,Jerusalem
-31.8026,35.1434,0.7,Gun Fight,Jerusalem
+31.5051,34.4508,0.7,explosion,Gaza
+31.42,34.3855,0.5,drone strike,Maghazi
+31.3442,34.3202,0.5,car explosion,Khan Yunis
+31.5282,34.4462,0.8,missile strike,Gaza
+31.6204,34.7502,0.8,forces gathering,Kiryat Gat
+31.7937,34.6474,0.6,air strikes,Ashdod
+32.0644,34.8088,0.3,soldiers spotted,Tel Aviv
+32.0357,34.7482,0.7,missile strike,Tel Aviv
+32.0718,34.8259,0.4,car explosion,Ramat Gan
+32.0146,34.7898,0.2,knife attack,Holon
+31.7875,35.2253,0.3,street brawl,Jerusalem
+31.8026,35.1434,0.7,gun fight,Jerusalem
