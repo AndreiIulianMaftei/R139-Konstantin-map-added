@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_c3615cdb17420a8b4c7cd339bb3905df {
+                #map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -55,19 +55,19 @@
 <body>
     
     
-            <div class="folium-map" id="map_c3615cdb17420a8b4c7cd339bb3905df" ></div>
+            <div class="folium-map" id="map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c" ></div>
         
 </body>
 <script>
     
     
-            var map_c3615cdb17420a8b4c7cd339bb3905df = L.map(
-                "map_c3615cdb17420a8b4c7cd339bb3905df",
+            var map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c = L.map(
+                "map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c",
                 {
                     center: [32.0, 35.0],
                     crs: L.CRS.EPSG3857,
                     ...{
-  "zoom": 7,
+  "zoom": 10,
   "zoomControl": true,
   "preferCanvas": false,
 }
@@ -79,7 +79,7 @@
 
         
     
-            var tile_layer_c34f148f3824e18846157637e9382637 = L.tileLayer(
+            var tile_layer_7bd55b5176d0d4d58333334a07a419ef = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -96,10 +96,10 @@
             );
         
     
-            tile_layer_c34f148f3824e18846157637e9382637.addTo(map_c3615cdb17420a8b4c7cd339bb3905df);
+            tile_layer_7bd55b5176d0d4d58333334a07a419ef.addTo(map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c);
         
     
-            var tile_layer_f8962b93a6ab069b40379e782110d86d = L.tileLayer(
+            var tile_layer_62cf529daa5b73be375b70be92318f6f = L.tileLayer(
                 "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
                 {
   "minZoom": 0,
@@ -116,283 +116,207 @@
             );
         
     
-            tile_layer_f8962b93a6ab069b40379e782110d86d.addTo(map_c3615cdb17420a8b4c7cd339bb3905df);
+            tile_layer_62cf529daa5b73be375b70be92318f6f.addTo(map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c);
         
     
-            var feature_group_a424958062b88f6d9f466e3abd7881d9 = L.featureGroup(
+            var feature_group_031f27e5fd91175248b44a190192b529 = L.featureGroup(
                 {
 }
             );
         
     
-            var marker_32d18cdba75039f973be17f8f6abd383 = L.marker(
-                [32.1, 35.0],
-                {
-}
-            ).addTo(feature_group_a424958062b88f6d9f466e3abd7881d9);
-        
-    
-            var icon_1663a69bcf9780a63afc6cd9cfefe006 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "shield-heart",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_c8969f598a12cfc9739d667b8185ca06 = L.popup({
-  "maxWidth": 200,
-});
-
-        
-            
-                var html_36522efc482848ae0e5a610f0cb1ff78 = $(`<div id="html_36522efc482848ae0e5a610f0cb1ff78" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Bunker       </div></div>`)[0];
-                popup_c8969f598a12cfc9739d667b8185ca06.setContent(html_36522efc482848ae0e5a610f0cb1ff78);
-            
-        
-
-        marker_32d18cdba75039f973be17f8f6abd383.bindPopup(popup_c8969f598a12cfc9739d667b8185ca06)
-        ;
-
-        
-    
-    
-                marker_32d18cdba75039f973be17f8f6abd383.setIcon(icon_1663a69bcf9780a63afc6cd9cfefe006);
-            
-    
-            var marker_96781780173b95feb9cfb70b89503fc6 = L.marker(
-                [32.1, 35.2],
-                {
-}
-            ).addTo(feature_group_a424958062b88f6d9f466e3abd7881d9);
-        
-    
-            var icon_ce43e50bb0dbb9814dae31f0b7c17af9 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "shield-heart",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_8bfd03124c8abc704dc09df060c2b2fe = L.popup({
-  "maxWidth": 200,
-});
-
-        
-            
-                var html_b2dcffe31995b9a3fda27910ea737fea = $(`<div id="html_b2dcffe31995b9a3fda27910ea737fea" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Safe Location       </div></div>`)[0];
-                popup_8bfd03124c8abc704dc09df060c2b2fe.setContent(html_b2dcffe31995b9a3fda27910ea737fea);
-            
-        
-
-        marker_96781780173b95feb9cfb70b89503fc6.bindPopup(popup_8bfd03124c8abc704dc09df060c2b2fe)
-        ;
-
-        
-    
-    
-                marker_96781780173b95feb9cfb70b89503fc6.setIcon(icon_ce43e50bb0dbb9814dae31f0b7c17af9);
-            
-    
-            var marker_83c7b84d98f468266af1e856ef217974 = L.marker(
-                [32.2, 35.0],
-                {
-}
-            ).addTo(feature_group_a424958062b88f6d9f466e3abd7881d9);
-        
-    
-            var icon_e3f6a7ca63ba077b8f02befc51b1d6f0 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "shield-heart",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_1b7e0d50c590491aa8813542fda63b9d = L.popup({
-  "maxWidth": 200,
-});
-
-        
-            
-                var html_642d33fe57ccb70facac14653ccfa427 = $(`<div id="html_642d33fe57ccb70facac14653ccfa427" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Shelter       </div></div>`)[0];
-                popup_1b7e0d50c590491aa8813542fda63b9d.setContent(html_642d33fe57ccb70facac14653ccfa427);
-            
-        
-
-        marker_83c7b84d98f468266af1e856ef217974.bindPopup(popup_1b7e0d50c590491aa8813542fda63b9d)
-        ;
-
-        
-    
-    
-                marker_83c7b84d98f468266af1e856ef217974.setIcon(icon_e3f6a7ca63ba077b8f02befc51b1d6f0);
-            
-    
-            var marker_8980f01d21df8992c181ea80aabc8036 = L.marker(
-                [32.3, 35.1],
-                {
-}
-            ).addTo(feature_group_a424958062b88f6d9f466e3abd7881d9);
-        
-    
-            var icon_15ff90c1247af8330d1010ef47b4d716 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "green",
-  "iconColor": "white",
-  "icon": "shield-heart",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_c3af5c2c2853a3fde9205401228c3b9d = L.popup({
-  "maxWidth": 200,
-});
-
-        
-            
-                var html_34d731f8dbb847e5cb88c8165da4bc11 = $(`<div id="html_34d731f8dbb847e5cb88c8165da4bc11" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Food Bank       </div></div>`)[0];
-                popup_c3af5c2c2853a3fde9205401228c3b9d.setContent(html_34d731f8dbb847e5cb88c8165da4bc11);
-            
-        
-
-        marker_8980f01d21df8992c181ea80aabc8036.bindPopup(popup_c3af5c2c2853a3fde9205401228c3b9d)
-        ;
-
-        
-    
-    
-                marker_8980f01d21df8992c181ea80aabc8036.setIcon(icon_15ff90c1247af8330d1010ef47b4d716);
-            
-    
-            feature_group_a424958062b88f6d9f466e3abd7881d9.addTo(map_c3615cdb17420a8b4c7cd339bb3905df);
-        
-    
-            var feature_group_b2bf23f6bde237bfdbf2399a7111fef6 = L.featureGroup(
-                {
-}
-            );
-        
-    
-            var heat_map_dbe902eab8d2b498b812db8172a04dc9 = L.heatLayer(
+            var heat_map_94021351b4effc476a00ca3eae9f1a6b = L.heatLayer(
                 [[32.3, 35.2, 0.1], [32.2, 35.1, 0.5], [32.1, 35.0, 0.6], [32.0, 34.9, 0.7]],
                 {
   "minOpacity": 0.5,
   "maxZoom": 18,
-  "radius": 20,
-  "blur": 50,
+  "radius": 25,
+  "blur": 25,
 }
             );
         
     
-            heat_map_dbe902eab8d2b498b812db8172a04dc9.addTo(feature_group_b2bf23f6bde237bfdbf2399a7111fef6);
+            heat_map_94021351b4effc476a00ca3eae9f1a6b.addTo(feature_group_031f27e5fd91175248b44a190192b529);
         
     
-            feature_group_b2bf23f6bde237bfdbf2399a7111fef6.addTo(map_c3615cdb17420a8b4c7cd339bb3905df);
+            feature_group_031f27e5fd91175248b44a190192b529.addTo(map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c);
         
     
-            var feature_group_272451d4bd14a97f07648db3919d423f = L.featureGroup(
+            var feature_group_ef1d8619d930a33ee079675687359131 = L.featureGroup(
                 {
 }
             );
         
     
-            var marker_84bdb625a1d215b22fdb08da40d4449f = L.marker(
-                [32.3, 35.2],
-                {
-}
-            ).addTo(feature_group_272451d4bd14a97f07648db3919d423f);
-        
-    
-            var icon_34baaf416e87c3dc02fa3d37d467ace4 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "red",
-  "iconColor": "white",
-  "icon": "skull-crossbones",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_89ac3542ba113381e022e54919ab8110 = L.popup({
-  "maxWidth": 200,
-});
-
-        
-            
-                var html_d4e5c59cec0fef1d10861669725e010a = $(`<div id="html_d4e5c59cec0fef1d10861669725e010a" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Bomb       </div></div>`)[0];
-                popup_89ac3542ba113381e022e54919ab8110.setContent(html_d4e5c59cec0fef1d10861669725e010a);
-            
-        
-
-        marker_84bdb625a1d215b22fdb08da40d4449f.bindPopup(popup_89ac3542ba113381e022e54919ab8110)
-        ;
-
-        
-    
-    
-                marker_84bdb625a1d215b22fdb08da40d4449f.setIcon(icon_34baaf416e87c3dc02fa3d37d467ace4);
-            
-    
-            var marker_db8db5e491e2c75aa0272f18006e67a1 = L.marker(
-                [32.2, 35.1],
-                {
-}
-            ).addTo(feature_group_272451d4bd14a97f07648db3919d423f);
-        
-    
-            var icon_b8a9ee9bc4f564334a87970c474b0211 = L.AwesomeMarkers.icon(
-                {
-  "markerColor": "red",
-  "iconColor": "white",
-  "icon": "skull-crossbones",
-  "prefix": "fa",
-  "extraClasses": "fa-rotate-0",
-}
-            );
-        
-    
-        var popup_2c7b6465df68f07229383e110c61f14b = L.popup({
-  "maxWidth": 200,
-});
-
-        
-            
-                var html_8aba5c49b1126d04dc8ed5ed35936335 = $(`<div id="html_8aba5c49b1126d04dc8ed5ed35936335" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Car Explosion       </div></div>`)[0];
-                popup_2c7b6465df68f07229383e110c61f14b.setContent(html_8aba5c49b1126d04dc8ed5ed35936335);
-            
-        
-
-        marker_db8db5e491e2c75aa0272f18006e67a1.bindPopup(popup_2c7b6465df68f07229383e110c61f14b)
-        ;
-
-        
-    
-    
-                marker_db8db5e491e2c75aa0272f18006e67a1.setIcon(icon_b8a9ee9bc4f564334a87970c474b0211);
-            
-    
-            var marker_cd49c34d2e0a3aa3c9ce371cf013d1db = L.marker(
+            var marker_e51432d6b845a06f24e1929903e1fc93 = L.marker(
                 [32.1, 35.0],
                 {
 }
-            ).addTo(feature_group_272451d4bd14a97f07648db3919d423f);
+            ).addTo(feature_group_ef1d8619d930a33ee079675687359131);
         
     
-            var icon_8c74ec2577f93fe65054a7a7778f7700 = L.AwesomeMarkers.icon(
+            var icon_dc1faeb367f38c290d89b121d990c084 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "shield-heart",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_00dcbee5edef05764dc4d95ba0728388 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_36c5e508b035f250410eb23e40cf94a2 = $(`<div id="html_36c5e508b035f250410eb23e40cf94a2" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Bunker       </div></div>`)[0];
+                popup_00dcbee5edef05764dc4d95ba0728388.setContent(html_36c5e508b035f250410eb23e40cf94a2);
+            
+        
+
+        marker_e51432d6b845a06f24e1929903e1fc93.bindPopup(popup_00dcbee5edef05764dc4d95ba0728388)
+        ;
+
+        
+    
+    
+                marker_e51432d6b845a06f24e1929903e1fc93.setIcon(icon_dc1faeb367f38c290d89b121d990c084);
+            
+    
+            var marker_200013af0fd0573af47f824d4ef671ee = L.marker(
+                [32.1, 35.2],
+                {
+}
+            ).addTo(feature_group_ef1d8619d930a33ee079675687359131);
+        
+    
+            var icon_ad7b771fe4be6a73dfa65be8cc168b1d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "shield-heart",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_baf6712c0bbdb5dbe7e7f7c8ca39545a = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_2da2d4677bd1fdb64070f9d2bfe7beb4 = $(`<div id="html_2da2d4677bd1fdb64070f9d2bfe7beb4" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Safe Location       </div></div>`)[0];
+                popup_baf6712c0bbdb5dbe7e7f7c8ca39545a.setContent(html_2da2d4677bd1fdb64070f9d2bfe7beb4);
+            
+        
+
+        marker_200013af0fd0573af47f824d4ef671ee.bindPopup(popup_baf6712c0bbdb5dbe7e7f7c8ca39545a)
+        ;
+
+        
+    
+    
+                marker_200013af0fd0573af47f824d4ef671ee.setIcon(icon_ad7b771fe4be6a73dfa65be8cc168b1d);
+            
+    
+            var marker_cc0a57d57ba0f28c87505b339c961ae2 = L.marker(
+                [32.2, 35.0],
+                {
+}
+            ).addTo(feature_group_ef1d8619d930a33ee079675687359131);
+        
+    
+            var icon_954e9ffe5cdb146def9292bf52cbe788 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "shield-heart",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_37ab24759a88d1e052f1644ac7eb670a = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_ed2c6794b5e005f8c02174ff260f4ac8 = $(`<div id="html_ed2c6794b5e005f8c02174ff260f4ac8" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Shelter       </div></div>`)[0];
+                popup_37ab24759a88d1e052f1644ac7eb670a.setContent(html_ed2c6794b5e005f8c02174ff260f4ac8);
+            
+        
+
+        marker_cc0a57d57ba0f28c87505b339c961ae2.bindPopup(popup_37ab24759a88d1e052f1644ac7eb670a)
+        ;
+
+        
+    
+    
+                marker_cc0a57d57ba0f28c87505b339c961ae2.setIcon(icon_954e9ffe5cdb146def9292bf52cbe788);
+            
+    
+            var marker_9427cc0271d17f65b2f16ba3d0d5b507 = L.marker(
+                [32.3, 35.1],
+                {
+}
+            ).addTo(feature_group_ef1d8619d930a33ee079675687359131);
+        
+    
+            var icon_d78ff9803e40c09ae3ff4c0a157f0dc9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "shield-heart",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_62f1f5378907a229a5e8fdcf7b455d92 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_e7e9b372199a410198b713a0d407335d = $(`<div id="html_e7e9b372199a410198b713a0d407335d" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #28A745;         font-weight: bold;         font-size: 14px;         ">Food Bank       </div></div>`)[0];
+                popup_62f1f5378907a229a5e8fdcf7b455d92.setContent(html_e7e9b372199a410198b713a0d407335d);
+            
+        
+
+        marker_9427cc0271d17f65b2f16ba3d0d5b507.bindPopup(popup_62f1f5378907a229a5e8fdcf7b455d92)
+        ;
+
+        
+    
+    
+                marker_9427cc0271d17f65b2f16ba3d0d5b507.setIcon(icon_d78ff9803e40c09ae3ff4c0a157f0dc9);
+            
+    
+            feature_group_ef1d8619d930a33ee079675687359131.addTo(map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c);
+        
+    
+            var feature_group_c1d30bffb6d5b171e7a8532ffb87f497 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_cda8f755b02daa8178abdb5ef27dbfe9 = L.marker(
+                [32.3, 35.2],
+                {
+}
+            ).addTo(feature_group_c1d30bffb6d5b171e7a8532ffb87f497);
+        
+    
+            var icon_9c9c43fcb83f4cc9550524be24b688dd = L.AwesomeMarkers.icon(
                 {
   "markerColor": "red",
   "iconColor": "white",
@@ -403,34 +327,110 @@
             );
         
     
-        var popup_78b39bdde3684d4203bc122dac5652b1 = L.popup({
+        var popup_ed95b5e4912040d913a1c141d6674803 = L.popup({
   "maxWidth": 200,
 });
 
         
             
-                var html_93baa7a0324c7c5eeda40e7b6bd7017e = $(`<div id="html_93baa7a0324c7c5eeda40e7b6bd7017e" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Drone Attackkw4e flaweh lghasdk guoasdh giadh daj gbadfgh adfg hkdfj gasdhig lasdlg adfjg ldf       </div></div>`)[0];
-                popup_78b39bdde3684d4203bc122dac5652b1.setContent(html_93baa7a0324c7c5eeda40e7b6bd7017e);
+                var html_c0e17efca7005393ccc2fcd486b0d7d8 = $(`<div id="html_c0e17efca7005393ccc2fcd486b0d7d8" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Bomb       </div></div>`)[0];
+                popup_ed95b5e4912040d913a1c141d6674803.setContent(html_c0e17efca7005393ccc2fcd486b0d7d8);
             
         
 
-        marker_cd49c34d2e0a3aa3c9ce371cf013d1db.bindPopup(popup_78b39bdde3684d4203bc122dac5652b1)
+        marker_cda8f755b02daa8178abdb5ef27dbfe9.bindPopup(popup_ed95b5e4912040d913a1c141d6674803)
         ;
 
         
     
     
-                marker_cd49c34d2e0a3aa3c9ce371cf013d1db.setIcon(icon_8c74ec2577f93fe65054a7a7778f7700);
+                marker_cda8f755b02daa8178abdb5ef27dbfe9.setIcon(icon_9c9c43fcb83f4cc9550524be24b688dd);
             
     
-            var marker_2be5ed5623433e4cf3ffe6281bbbd993 = L.marker(
+            var marker_a59d48cf4c6c5ff0811d3c9c34913fe9 = L.marker(
+                [32.2, 35.1],
+                {
+}
+            ).addTo(feature_group_c1d30bffb6d5b171e7a8532ffb87f497);
+        
+    
+            var icon_168fe47d5056398219a5335d1e144a38 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "skull-crossbones",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_063ddf38cf9735aee74cdb3bf82b688f = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_350f7b68285ec8c675a2d890b71d51df = $(`<div id="html_350f7b68285ec8c675a2d890b71d51df" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Car Explosion       </div></div>`)[0];
+                popup_063ddf38cf9735aee74cdb3bf82b688f.setContent(html_350f7b68285ec8c675a2d890b71d51df);
+            
+        
+
+        marker_a59d48cf4c6c5ff0811d3c9c34913fe9.bindPopup(popup_063ddf38cf9735aee74cdb3bf82b688f)
+        ;
+
+        
+    
+    
+                marker_a59d48cf4c6c5ff0811d3c9c34913fe9.setIcon(icon_168fe47d5056398219a5335d1e144a38);
+            
+    
+            var marker_48adcab1e504828ab332f7176865a5e2 = L.marker(
+                [32.1, 35.0],
+                {
+}
+            ).addTo(feature_group_c1d30bffb6d5b171e7a8532ffb87f497);
+        
+    
+            var icon_a06305285e2d66ffae6992073e9f5388 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "skull-crossbones",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f1462a110955761e998c591974406b56 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_cf722d6827d0def1b759ecaff90cc4bf = $(`<div id="html_cf722d6827d0def1b759ecaff90cc4bf" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Drone Attackkw4e flaweh lghasdk guoasdh giadh daj gbadfgh adfg hkdfj gasdhig lasdlg adfjg ldf       </div></div>`)[0];
+                popup_f1462a110955761e998c591974406b56.setContent(html_cf722d6827d0def1b759ecaff90cc4bf);
+            
+        
+
+        marker_48adcab1e504828ab332f7176865a5e2.bindPopup(popup_f1462a110955761e998c591974406b56)
+        ;
+
+        
+    
+    
+                marker_48adcab1e504828ab332f7176865a5e2.setIcon(icon_a06305285e2d66ffae6992073e9f5388);
+            
+    
+            var marker_751f656cc87fc52f3a4c45966c5ebeba = L.marker(
                 [32.0, 34.9],
                 {
 }
-            ).addTo(feature_group_272451d4bd14a97f07648db3919d423f);
+            ).addTo(feature_group_c1d30bffb6d5b171e7a8532ffb87f497);
         
     
-            var icon_0f3fe9fdf9770ea30881e88df06ebc64 = L.AwesomeMarkers.icon(
+            var icon_e7a5a5f0f01b1108a7626adfecc54d98 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "red",
   "iconColor": "white",
@@ -441,27 +441,27 @@
             );
         
     
-        var popup_965ff1755ed119c1594f1390ac3abd30 = L.popup({
+        var popup_9cba9c22043646551061981866050312 = L.popup({
   "maxWidth": 200,
 });
 
         
             
-                var html_c037ad90cf46cb4aee896e2c4e693431 = $(`<div id="html_c037ad90cf46cb4aee896e2c4e693431" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Air Strike       </div></div>`)[0];
-                popup_965ff1755ed119c1594f1390ac3abd30.setContent(html_c037ad90cf46cb4aee896e2c4e693431);
+                var html_f70da907f76a20f75a7d3bd4b4280723 = $(`<div id="html_f70da907f76a20f75a7d3bd4b4280723" style="width: 100.0%; height: 100.0%;">       <div style="         font-family: Arial, sans-serif;         color: #b22222;         font-weight: bold;         font-size: 14px;         ">Air Strike       </div></div>`)[0];
+                popup_9cba9c22043646551061981866050312.setContent(html_f70da907f76a20f75a7d3bd4b4280723);
             
         
 
-        marker_2be5ed5623433e4cf3ffe6281bbbd993.bindPopup(popup_965ff1755ed119c1594f1390ac3abd30)
+        marker_751f656cc87fc52f3a4c45966c5ebeba.bindPopup(popup_9cba9c22043646551061981866050312)
         ;
 
         
     
     
-                marker_2be5ed5623433e4cf3ffe6281bbbd993.setIcon(icon_0f3fe9fdf9770ea30881e88df06ebc64);
+                marker_751f656cc87fc52f3a4c45966c5ebeba.setIcon(icon_e7a5a5f0f01b1108a7626adfecc54d98);
             
     
-            feature_group_272451d4bd14a97f07648db3919d423f.addTo(map_c3615cdb17420a8b4c7cd339bb3905df);
+            feature_group_c1d30bffb6d5b171e7a8532ffb87f497.addTo(map_cc0663cb6ed05a0f13ed0fbfdf6b9a9c);
         
 </script>
 </html>

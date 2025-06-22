@@ -157,6 +157,182 @@
             align-items: center;
         }
 
+        /* Add these styles to your existing CSS */
+
+        /* Update existing toolbar to use flexbox */
+        .xp-toolbar {
+            background: var(--xp-window-bg);
+            border-top: 1px solid var(--xp-dark-gray);
+            border-bottom: 1px solid var(--xp-white);
+            padding: 4px 8px;
+            display: flex;          /* Enable flexbox */
+            gap: 4px;
+            align-items: center;
+            justify-content: flex-start; /* Align items to left, except spacer will push clock right */
+        }
+
+        /* Spacer to push clock to the right */
+        .toolbar-spacer {
+            flex: 1; /* Takes up all remaining space */
+        }
+
+        /* Base clock container */
+        .toolbar-clock {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 3px 6px;
+            border: 1px inset var(--xp-gray);
+            background: var(--xp-white);
+            min-width: 85px;
+            font-family: var(--xp-font);
+            margin-left: 8px;
+        }
+
+        .clock-time {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--xp-black);
+            line-height: 1.1;
+        }
+
+        .clock-date {
+            font-size: 9px;
+            color: var(--xp-dark-gray);
+            line-height: 1.1;
+        }
+
+        /* Clock Style Variations */
+
+        /* Single line style */
+        .toolbar-clock.single-line {
+            flex-direction: row;
+            gap: 6px;
+            align-items: center;
+            min-width: 140px;
+        }
+
+        .toolbar-clock.single-line .clock-date {
+            font-size: 10px;
+        }
+
+        /* Digital/retro style */
+        .toolbar-clock.digital {
+            background: #000000;
+            border: 1px inset var(--xp-gray);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+
+        .toolbar-clock.digital .clock-time {
+            color: #00ff00;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 2px #00ff00;
+        }
+
+        .toolbar-clock.digital .clock-date {
+            color: #00aa00;
+            font-size: 9px;
+        }
+
+        /* Compact style */
+        .toolbar-clock.compact {
+            min-width: 65px;
+            padding: 2px 4px;
+        }
+
+        .toolbar-clock.compact .clock-time {
+            font-size: 10px;
+        }
+
+        .toolbar-clock.compact .clock-date {
+            font-size: 8px;
+        }
+
+        /* Highlighted style */
+        .toolbar-clock.highlighted {
+            background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+            border: 1px outset var(--xp-gray);
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Blinking seconds indicator (optional) */
+        .clock-time.blinking::after {
+            content: '';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .toolbar-clock {
+                min-width: 70px;
+                padding: 2px 4px;
+            }
+
+            .clock-time {
+                font-size: 10px;
+            }
+
+            .clock-date {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .toolbar-clock.single-line {
+                flex-direction: column;
+                min-width: 60px;
+            }
+
+            .toolbar-clock .clock-date {
+                display: none; /* Hide date on very small screens */
+            }
+        }
+
+        /* Clock hover effects */
+        .toolbar-clock:hover {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
+            cursor: default;
+        }
+
+        .toolbar-clock.digital:hover {
+            background: #111111;
+        }
+
+        /* Status bar clock (alternative position) */
+        .status-bar .toolbar-clock {
+            border: none;
+            background: transparent;
+            padding: 0 8px;
+            margin: 0;
+        }
+
+        .status-bar .clock-time,
+        .status-bar .clock-date {
+            color: var(--xp-black);
+        }
+
+        /* Clock with timezone label */
+        .toolbar-clock.with-timezone::before {
+            content: attr(data-timezone);
+            font-size: 7px;
+            color: var(--xp-dark-gray);
+            position: absolute;
+            top: 1px;
+            left: 2px;
+        }
+
+        .toolbar-clock.with-timezone {
+            position: relative;
+            padding-top: 12px;
+        }
+
         .toolbar-separator {
             width: 1px;
             height: 16px;
@@ -174,8 +350,8 @@
         /* Chat Panel */
         .chat-panel {
             position: fixed;
-            top: 50px;
-            right: 20px;
+            top: 75px;
+            right: 15px;
             width: 300px;
             height: 400px;
             background: var(--xp-window-bg);
@@ -270,8 +446,8 @@
         /* Layers Panel */
         .layers-panel {
             position: fixed;
-            top: 100px;
-            left: 20px;
+            top: 80px;
+            left: 60px;
             width: 200px;
             background: var(--xp-window-bg);
             border: 2px outset var(--xp-gray);
@@ -324,7 +500,7 @@
             <div class="menu-item">View</div>
             <div class="menu-item">Map</div>
             <div class="menu-item">Tools</div>
-            <div class="menu-item">Help</div>
+            <div class="menu-item" onclick="alert('IN CASE OF EMERGENCY: +49 XXXXXXXXX \nEmbassy Map Help:\n\n🗺️ Left Click: Pan map\n🖱️ Mouse Wheel: Zoom\n🛠️ Toolbar: Use buttons for tools\n💬 Chat: Secure communications\n📂 Layers: Toggle map layers\n⌨️ Esc: Close windows\n\nEmbassy Map System v1.0')">Help</div>
         </div>
 
         <!-- Toolbar -->
@@ -338,6 +514,11 @@
             <div class="toolbar-separator"></div>
             <button class="xp-button" id="refreshButton">↻ Refresh</button>
             <button class="xp-button">🎯 Center</button>
+            <div class="toolbar-spacer"></div>
+            <div class="toolbar-clock">
+                <span class="clock-time" id="clockTime">00:00:00</span>
+                <span class="clock-date" id="clockDate">Mon, Jan 1</span>
+            </div>
         </div>
 
         <!-- Map Container -->
@@ -368,8 +549,12 @@
             <button class="control-btn" onclick="toggleChat()">✕</button>
         </div>        <div class="chat-body" id="chatBody">
             <div style="padding: 8px; border-bottom: 1px solid #d0d0d0;">
-                <strong>🚨 System:</strong> Israel Emergency Safety Bot initialized. Ask about safety locations, emergency procedures, or current threats.<br>
-                <small style="color: #808080;" id="currentTime"></small>
+                <strong>System:</strong> Chat interface initialized.<br>
+                <small style="color: #808080;">12:34 PM</small>
+            </div>
+            <div style="padding: 8px;">
+                <strong>User:</strong> Map interface ready for operations.<br>
+                <small style="color: #808080;">12:35 PM</small>
             </div>
         </div>
         <div class="chat-footer">
@@ -411,6 +596,21 @@
             const layersPanel = document.getElementById('layersPanel');
             layersPanel.style.display = layersPanel.style.display === 'none' ? 'block' : 'none';
         }        // Chat functionality
+
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'short', month: 'short', day: 'numeric'
+            });
+
+            document.getElementById('clockTime').textContent = timeString;
+            document.getElementById('clockDate').textContent = dateString;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
         let isLoading = false;
         
         function getCurrentTime() {
@@ -714,7 +914,6 @@
 
         // Initialize time display
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('currentTime').textContent = getCurrentTime();
             
             // Add enter key support
             document.getElementById('chatInput').addEventListener('keypress', function(e) {

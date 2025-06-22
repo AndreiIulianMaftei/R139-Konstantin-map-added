@@ -1,36 +1,32 @@
-/* XP Components CSS */
-:root {
-  --xp-font: 'Tahoma', 'MS Sans Serif', sans-serif;
-  --xp-gray: #c0c0c0;
-  --xp-dark-gray: #808080;
-  --xp-white: #ffffff;
-  --xp-window-bg: #ece9d8;
-  --xp-titlebar-gradient: linear-gradient(to bottom, #0078d4 0%, #106ebe 100%);
-  --xp-selected-gradient: linear-gradient(to bottom, #316ac5 0%, #2158a8 100%);
-  --xp-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+.xp-window {
+    background: #ece9d8;
+    border: 2px outset #d4d0c8;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-.xp-window {
-  background: var(--xp-window-bg);
-  border: 2px outset var(--xp-gray);
-  box-shadow: var(--xp-shadow);
-  font-family: var(--xp-font);
-  font-size: 11px;
+.xp-titlebar {
+    background: linear-gradient(180deg, #0054e3 0%, #0040aa 100%);
+    color: white;
+    padding: 3px 6px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .xp-button {
-  background: var(--xp-window-bg);
-  border: 1px outset var(--xp-gray);
-  padding: 4px 8px;
-  font-family: var(--xp-font);
-  font-size: 11px;
-  cursor: pointer;
+    background: linear-gradient(180deg, #ffffff 0%, #ece9d8 50%, #d6d3ce 100%);
+    border: 1px outset #d4d0c8;
+    padding: 2px 8px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
 }
 
 .xp-button:hover {
-  background: #f0f0f0;
+    background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
 }
 
 .xp-button:active {
-  border: 1px inset var(--xp-gray);
+    border: 1px inset #d4d0c8;
 }

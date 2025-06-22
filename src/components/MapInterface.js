@@ -4,11 +4,11 @@ import { XPWindow } from './common/XPWindow';
 import { XPButton } from './common/XPButton';
 import { XPTabs } from './common/XPTabs';
 import { XPDropdown } from './common/XPDropdown';
-import { useXPDialog } from './common/XPDialog';
+import { useXPDialog } from '../hooks/useXPDialog';
 import MapContainer from './MapContainer';
 import ActionToolbar from './ActionToolbar';
 import ChatPanel from './ChatPanel';
-import LayersPanel from './LayersPanel';
+import LayersPanel from './map/LayersPanel';
 
 const MapInterface = () => {
   const [activeWindows, setActiveWindows] = useState([]);
@@ -83,19 +83,7 @@ const MapInterface = () => {
           />
         </XPWindow>
 
-        {/* Dynamic Windows */}
-        {activeWindows.map(window => (
-          <DynamicWindow
-            key={window.id}
-            window={window}
-            onClose={() => closeWindow(window.id)}
-            mapSettings={mapSettings}
-            onSettingsChange={setMapSettings}
-          />
-        ))}
 
-        {/* Desktop Icons */}
-        <DesktopIcons onOpenWindow={openWindow} />
       </div>
     </div>
   );
@@ -108,68 +96,27 @@ const MapInterfaceContent = ({ mapSettings, onSettingsClick, onExportClick }) =>
 
   return (
     <>
-      {/* Menu Bar */}
+    {/* Temporarily commented out until MenuDropdown is created
       <div className="xp-menubar">
-        <MenuDropdown title="File" items={[
-          { label: 'New Map', action: 'new', icon: '📄' },
-          { label: 'Open Map...', action: 'open', icon: '📂' },
-          { label: 'Save Map', action: 'save', icon: '💾' },
-          { label: '-' },
-          { label: 'Export...', action: 'export', icon: '📤' },
-          { label: 'Print...', action: 'print', icon: '🖨️' },
-          { label: '-' },
-          { label: 'Exit', action: 'exit' }
-        ]} onAction={(action) => {
-          if (action === 'export') onExportClick();
-        }} />
-        
-        <MenuDropdown title="View" items={[
-          { label: 'Zoom In', action: 'zoom-in', shortcut: 'Ctrl++' },
-          { label: 'Zoom Out', action: 'zoom-out', shortcut: 'Ctrl+-' },
-          { label: 'Fit to Window', action: 'fit' },
-          { label: '-' },
-          { label: 'Show Grid', action: 'grid', checked: mapSettings.showGrid },
-          { label: 'Show Compass', action: 'compass', checked: mapSettings.showCompass }
-        ]} />
-        
-        <MenuDropdown title="Tools" items={[
-          { label: 'Settings...', action: 'settings' }
-        ]} onAction={(action) => {
-          if (action === 'settings') onSettingsClick();
-        }} />
+      <MenuDropdown title="File" items={[...]} />
+      <MenuDropdown title="View" items={[...]} />
+      <MenuDropdown title="Tools" items={[...]} />
       </div>
+    */}
 
-      {/* Toolbar */}
-      <ActionToolbar 
-        onToggleChat={() => setChatOpen(!isChatOpen)}
-        onToggleLayers={() => setLayersOpen(!isLayersOpen)}
-      />
-
-      {/* Map Area */}
-      <div style={{ flex: 1, position: 'relative' }}>
-        <MapContainer settings={mapSettings} />
+    <div style={{ padding: '20px' }}>
+      <h3>Map Interface Content</h3>
+      <button onClick={onSettingsClick}>Settings</button>
+      <button onClick={onExportClick}>Export</button>
         
-        {isChatOpen && (
-          <ChatPanel 
-            isOpen={isChatOpen}
-            onClose={() => setChatOpen(false)}
-          />
-        )}
-        
-        {isLayersOpen && (
-          <LayersPanel
-            isOpen={isLayersOpen}
-            onClose={() => setLayersOpen(false)}
-          />
-        )}
-      </div>
-
-      {/* Status Bar */}
-      <div className="xp-status-bar">
-        <div>Ready</div>
-        <div>Zoom: {mapSettings.zoom}%</div>
-        <div>{new Date().toLocaleTimeString()}</div>
+      {/* Your other content here */}
+      <MapContainer />
+      <ActionToolbar />
+      <ChatPanel />
+      <LayersPanel />
       </div>
     </>
   );
-};
+
+}
+export default MapInterface;

@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { XPDialogProvider } from './components/common/XPDialog';
+import { XPDialogProvider } from './hooks/useXPDialog';
 import MapInterface from './components/MapInterface';
 import './styles/index.css';
 import './styles/xp-components.css';

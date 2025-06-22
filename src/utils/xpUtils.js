@@ -1,7 +1,7 @@
 // XP Utility Functions & Hooks
 // src/utils/xpUtils.js
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 // === Window Management Utilities ===
 

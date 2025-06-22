@@ -1,0 +1,95 @@
+/* src/components/map/LayersPanel.css */
+.layers-panel {
+    background: var(--xp-window-bg, #ece9d8);
+    border: 2px inset var(--xp-gray, #d4d0c8);
+    padding: 8px;
+    min-width: 200px;
+    font-family: var(--xp-font, 'Tahoma', sans-serif);
+    font-size: 11px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--xp-dark-gray, #808080);
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.panel-header h3 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--xp-black, #000000);
+}
+
+.close-button {
+    background: var(--xp-button-gradient, linear-gradient(180deg, #ffffff 0%, #ece9d8 50%, #d6d3ce 100%));
+    border: 1px outset var(--xp-gray, #d4d0c8);
+    cursor: pointer;
+    padding: 2px 4px;
+    font-size: 10px;
+}
+
+.close-button:hover {
+    background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+}
+
+.close-button:active {
+    border: 1px inset var(--xp-gray, #d4d0c8);
+}
+
+.layers-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.layer-item {
+    margin-bottom: 8px;
+    padding: 4px;
+    border: 1px solid transparent;
+}
+
+.layer-item:hover {
+    background: #f0f0f0;
+    border: 1px solid var(--xp-gray, #d4d0c8);
+}
+
+.layer-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.layer-name {
+    font-weight: normal;
+    color: var(--xp-black, #000000);
+}
+
+.layer-name.locked {
+    color: var(--xp-dark-gray, #808080);
+    font-style: italic;
+}
+
+.layer-opacity {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 20px;
+    font-size: 10px;
+}
+
+.layer-opacity label {
+    color: var(--xp-dark-gray, #808080);
+}
+
+.layer-opacity input[type="range"] {
+    width: 80px;
+}
+
+.layer-opacity span {
+    min-width: 30px;
+    text-align: right;
+}
