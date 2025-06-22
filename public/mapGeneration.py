@@ -49,7 +49,7 @@ def getBunkerLayer():
   bunkerMarkers = folium.FeatureGroup(name='Bunkers')
     
   for _, row in bunkerLocationsPD.iterrows():
-    bunkerLocation = {'location': (row['lat'],row['lon']), 'info': row['type']}
+    bunkerLocation = {'location': (row['lat'],row['lon']), 'info': row['desc']}
     bunkerLocations.append(bunkerLocation)
     
   for bunker in bunkerLocations:
@@ -91,7 +91,7 @@ def getAttackLayer():
   attackMarkers = folium.FeatureGroup(name='Attacks')
 
   for _, row in attackLocationsPD.iterrows():
-    attackLocation = {'location': (row['lat'],row['lon']), 'info': row['type']}
+    attackLocation = {'location': (row['lat'],row['lon']), 'info': row['desc']}
     attackLocations.append(attackLocation)
     
   for attack in attackLocations:

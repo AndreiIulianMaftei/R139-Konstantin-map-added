@@ -143,8 +143,7 @@ class IsraelSafetyRAGBot:
                 intensity_text = f"Moderate Threat Level: {intensity:.1f}/1.0 - Exercise Caution"
             else:
                 danger_level = "LOW"
-                intensity_text = f"Low Threat Level: {intensity:.1f}/1.0 - Monitor Situation"
-          # Enhanced content templates with source file and intensity consideration
+                intensity_text = f"Low Threat Level: {intensity:.1f}/1.0 - Monitor Situation"        # Enhanced content templates with source file and intensity consideration
         # Override categorization based on source file
         if is_safe_source:
             # Everything from bunkers.csv is treated as safe
@@ -169,6 +168,13 @@ class IsraelSafetyRAGBot:
                 Contact for citizen services, emergency assistance, and evacuation support.
                 Description: {row.get('desc', 'Diplomatic facility')}
                 Source: {source_file} (VERIFIED SAFE LOCATION)
+                """,
+                'food bank': f"""
+                FOOD BANK - {city_name} ({row['lat']}, {row['lon']})
+                Emergency food assistance and humanitarian aid available.
+                Safe community resource for food security during emergencies.
+                Description: {row.get('desc', 'Emergency food assistance')}
+                Source: {source_file} (VERIFIED SAFE LOCATION)
                 """
             }
             # Default safe location template for any type from bunkers.csv
@@ -178,7 +184,6 @@ class IsraelSafetyRAGBot:
             Description: {row.get('desc', 'Safe facility')}
             Source: {source_file} (VERIFIED SAFE LOCATION)
             """
-            
         elif is_danger_source:
             # Everything from heat.csv is treated as dangerous
             content_templates = {
@@ -230,6 +235,27 @@ class IsraelSafetyRAGBot:
                 SECURITY ALERT: Armed personnel in area.
                 Exercise extreme caution. Monitor situation.
                 Source: {source_file} (THREAT ZONE)
+                """,
+                'knife attack': f"""
+                KNIFE ATTACK - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Stabbing incident reported. AVOID area immediately.
+                Call 100 (Police), 101 (Medical). Stay alert for suspects.
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'street brawl': f"""
+                STREET BRAWL - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Violent altercation in progress. AVOID area.
+                Call 100 (Police). Stay away from crowds and disturbances.
+                Source: {source_file} (THREAT ZONE)
+                """,
+                'gun fight': f"""
+                GUN FIGHT - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                CRITICAL DANGER: Armed confrontation in progress.
+                TAKE IMMEDIATE COVER. Call 100 (Police). Do not approach.
+                Source: {source_file} (THREAT ZONE)
                 """
             }
             # Default danger template for any type from heat.csv
@@ -239,7 +265,6 @@ class IsraelSafetyRAGBot:
             DANGER: This location is flagged as unsafe. Stay away.
             Source: {source_file} (THREAT ZONE)
             """
-            
         else:
             # Original logic for other source files
             content_templates = {
@@ -262,6 +287,13 @@ class IsraelSafetyRAGBot:
                 Safe diplomatic facility with international protection.
                 Contact for citizen services, emergency assistance, and evacuation support.
                 Description: {row.get('desc', 'Diplomatic facility')}
+                Source: {source_file}
+                """,
+                'food bank': f"""
+                FOOD BANK - {city_name} ({row['lat']}, {row['lon']})
+                Emergency food assistance and humanitarian aid available.
+                Safe community resource for food security during emergencies.
+                Description: {row.get('desc', 'Emergency food assistance')}
                 Source: {source_file}
                 """,
                 'explosion': f"""
@@ -312,6 +344,27 @@ class IsraelSafetyRAGBot:
                 SECURITY ALERT: Armed personnel in area.
                 Exercise extreme caution. Monitor situation.
                 Source: {source_file}
+                """,
+                'knife attack': f"""
+                KNIFE ATTACK - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Stabbing incident reported. AVOID area immediately.
+                Call 100 (Police), 101 (Medical). Stay alert for suspects.
+                Source: {source_file}
+                """,
+                'street brawl': f"""
+                STREET BRAWL - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                DANGER: Violent altercation in progress. AVOID area.
+                Call 100 (Police). Stay away from crowds and disturbances.
+                Source: {source_file}
+                """,
+                'gun fight': f"""
+                GUN FIGHT - {city_name} ({row['lat']}, {row['lon']})
+                {intensity_text}
+                CRITICAL DANGER: Armed confrontation in progress.
+                TAKE IMMEDIATE COVER. Call 100 (Police). Do not approach.
+                Source: {source_file}
                 """
             }
             # Default template for other sources
@@ -329,11 +382,10 @@ class IsraelSafetyRAGBot:
         
         for _, row in self.df.iterrows():
             content = self._create_content_by_type(row)
-            city_name = row.get('city', row.get('name', 'Unknown'))
-              # Create comprehensive metadata for better retrieval
+            city_name = row.get('city', row.get('name', 'Unknown'))            # Create comprehensive metadata for better retrieval
             # Determine category based on both type and source file
             source_file = row.get('source_file', 'data.csv')
-            is_safe_by_type = row['type'] in ['bunker', 'shelter', 'embassy']
+            is_safe_by_type = row['type'] in ['bunker', 'shelter', 'embassy', 'food bank']
             is_safe_by_source = source_file == 'bunkers.csv'
             is_danger_by_source = source_file == 'heat.csv'
             
@@ -478,15 +530,21 @@ CRITICAL RULES:
 - If user mentions a city, be PRECISE - only show facilities in that exact city
 - ALWAYS show both safety facilities AND threat zones in every response  
 - Use intensity ratings: CRITICAL (0.8+), HIGH (0.6-0.8), MODERATE (0.4-0.6), LOW (<0.4)
-- Include GPS coordinates for all locations
+- MANDATORY COORDINATES: For EVERY location you mention, you MUST use the exact GPS coordinates from the data provided in the context. Never provide generic or estimated coordinates - only use the precise lat/lon values stored in the database.
 - Use simple markdown: *text* for emphasis only
 - Prioritize the most relevant information first
--keep markdown simple and clear
+- Keep markdown simple and clear
+
+COORDINATE REQUIREMENTS:
+- ALWAYS include the exact coordinates (lat, lon) from the database for every facility or location mentioned
+- Never estimate or approximate coordinates - only use the stored data values
+- Format coordinates as: (latitude, longitude) using the exact values from the context
+- If a location doesn't have stored coordinates in the data, do not provide coordinates for it
 
 FORMATTING:
 - Use *text* for emphasis (single asterisks only)
 - Use - for bullet points  
-- Include GPS coordinates as (lat, lon)
+- Include GPS coordinates as (lat, lon) using EXACT values from the database
 - Keep responses clear and actionable
 
 Context: {context}
@@ -741,10 +799,9 @@ Precise emergency response:""",
                                  query_type: str = "safety") -> List[Dict]:
         """Find locations based on query context (safety vs danger)"""
         results = []
-        
-        if query_type.lower() in ["safety", "shelter", "bunker", "embassy", "protection", "bank"]:
-            # Find safety locations (bunkers, shelters, embassies + all from bunkers.csv)
-            safety_types = ['bunker', 'shelter', 'embassy']
+        if query_type.lower() in ["safety", "shelter", "bunker", "embassy", "protection", "food"]:
+            # Find safety locations (bunkers, shelters, embassies, food banks + all from bunkers.csv)
+            safety_types = ['bunker', 'shelter', 'embassy', 'food bank']
             filtered_df = self.df[
                 (self.df['type'].isin(safety_types)) | 
                 (self.df['source_file'] == 'bunkers.csv')
@@ -759,11 +816,13 @@ Precise emergency response:""",
                     'distance_km': round(distance, 2),
                     'category': 'safety',
                     'description': row.get('desc', 'Safety facility')
-                })
+                })        
+        
         elif query_type.lower() in ["danger", "threat", "risk", "avoid", "hazard"]:
             # Find dangerous locations with intensity ratings (including all from heat.csv)
             danger_types = ['explosion', 'drone strike', 'car explosion', 'missile strike', 
-                          'forces gathering', 'air strikes', 'soldiers spotted']
+                          'forces gathering', 'air strikes', 'soldiers spotted', 'knife attack',
+                          'street brawl', 'gun fight']
             filtered_df = self.df[
                 (self.df['type'].isin(danger_types)) | 
                 (self.df['source_file'] == 'heat.csv')
@@ -796,13 +855,13 @@ Precise emergency response:""",
             # General query - return mixed results with source file consideration
             for _, row in self.df.iterrows():
                 distance = self.calculate_distance(user_lat, user_lon, row['lat'], row['lon'])
-                
-                # Determine category based on source file and type
+                  # Determine category based on source file and type
                 source_file = row.get('source_file', 'data.csv')
-                is_safe_by_type = row['type'] in ['bunker', 'shelter', 'embassy']
+                is_safe_by_type = row['type'] in ['bunker', 'shelter', 'embassy', 'food bank']
                 is_safe_by_source = source_file == 'bunkers.csv'
                 is_danger_by_source = source_file == 'heat.csv'
-                
+                if row['type'] in ['food bank']:
+                    ok = 1
                 if is_safe_by_source or (is_safe_by_type and not is_danger_by_source):
                     category = 'safety'
                 else:
@@ -860,10 +919,10 @@ Precise emergency response:""",
             return {"safety": [], "threats": []}
         
         city_df = self.df[self.df['city'].str.lower() == city_name.lower()]
-        
-        safety_types = ['bunker', 'shelter', 'embassy', 'bank']
+        safety_types = ['bunker', 'shelter', 'embassy', 'food bank']
         danger_types = ['explosion', 'drone strike', 'car explosion', 'missile strike', 
-                       'forces gathering', 'air strikes', 'soldiers spotted']
+                       'forces gathering', 'air strikes', 'soldiers spotted', 'knife attack', 
+                       'street brawl', 'gun fight']
         
         safety_facilities = []
         threat_zones = []
