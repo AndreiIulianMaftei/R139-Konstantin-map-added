@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embassy Map Interface - Windows XP Style</title>
+    <style>
+        /* Windows XP Design System */
+        :root {
+            /* XP Color Palette */
+            --xp-blue: #0054e3;
+            --xp-light-blue: #ece9d8;
+            --xp-window-bg: #ece9d8;
+            --xp-white: #ffffff;
+            --xp-gray: #d4d0c8;
+            --xp-dark-gray: #808080;
+            --xp-black: #000000;
+            --xp-green: #00a000;
+            --xp-red: #c00000;
+            --xp-yellow: #ffff00;
+            
+            /* XP Gradients */
+            --xp-button-gradient: linear-gradient(180deg, #ffffff 0%, #ece9d8 50%, #d6d3ce 100%);
+            --xp-titlebar-gradient: linear-gradient(180deg, #0054e3 0%, #0040aa 100%);
+            --xp-selected-gradient: linear-gradient(180deg, #316ac5 0%, #1f5caa 100%);
+            
+            /* Typography */
+            --xp-font: 'Tahoma', 'MS Sans Serif', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--xp-font);
+            font-size: 11px;
+            background: var(--xp-light-blue);
+            overflow: hidden;
+        }
+
+        /* XP Window Container */
+        .xp-window {
+            position: absolute;
+            background: var(--xp-window-bg);
+            border: 2px outset var(--xp-gray);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* XP Title Bar */
+        .xp-titlebar {
+            background: var(--xp-titlebar-gradient);
+            color: white;
+            padding: 3px 6px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--xp-dark-gray);
+        }
+
+        .xp-titlebar .title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .xp-titlebar .title::before {
+            content: "🗺️";
+            font-size: 14px;
+        }
+
+        /* XP Buttons */
+        .xp-button {
+            background: var(--xp-button-gradient);
+            border: 1px outset var(--xp-gray);
+            padding: 2px 8px;
+            font-family: var(--xp-font);
+            font-size: 11px;
+            cursor: pointer;
+            min-width: 75px;
+            height: 23px;
+        }
+
+        .xp-button:hover {
+            background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%);
+        }
+
+        .xp-button:active {
+            border: 1px inset var(--xp-gray);
+            background: var(--xp-gray);
+        }
+
+        .xp-button.primary {
+            font-weight: bold;
+        }
+
+        /* Window Controls */
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .control-btn {
+            width: 16px;
+            height: 14px;
+            background: var(--xp-button-gradient);
+            border: 1px outset var(--xp-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+        }
+
+        .control-btn:active {
+            border: 1px inset var(--xp-gray);
+        }
+
+        /* Main Interface Layout */
+        .main-interface {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Map Container */
+        .map-container {
+            flex: 1;
+            background: var(--xp-white);
+            border: 2px inset var(--xp-gray);
+            margin: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--xp-dark-gray);
+            font-size: 14px;
+        }
+
+        /* Toolbar */
+        .xp-toolbar {
+            background: var(--xp-window-bg);
+            border-top: 1px solid var(--xp-dark-gray);
+            border-bottom: 1px solid var(--xp-white);
+            padding: 4px 8px;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 16px;
+            background: var(--xp-dark-gray);
+            margin: 0 4px;
+        }
+
+        /* XP Panels */
+        .xp-panel {
+            background: var(--xp-window-bg);
+            border: 2px inset var(--xp-gray);
+            padding: 8px;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            position: fixed;
+            top: 50px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: var(--xp-window-bg);
+            border: 2px outset var(--xp-gray);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transform: translateX(320px);
+            transition: transform 0.3s ease;
+        }
+
+        .chat-panel.open {
+            transform: translateX(0);
+        }
+
+        .chat-header {
+            background: var(--xp-titlebar-gradient);
+            color: white;
+            padding: 3px 6px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            height: 300px;
+            background: var(--xp-white);
+            border: 1px inset var(--xp-gray);
+            margin: 4px;
+            padding: 4px;
+            overflow-y: auto;
+            font-size: 11px;
+        }
+
+        .chat-footer {
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px inset var(--xp-gray);
+            padding: 2px 4px;
+            font-family: var(--xp-font);
+            font-size: 11px;
+        }
+
+        /* XP Menu Bar */
+        .xp-menubar {
+            background: var(--xp-window-bg);
+            border-bottom: 1px solid var(--xp-dark-gray);
+            padding: 2px;
+            display: flex;
+        }
+
+        .menu-item {
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .menu-item:hover {
+            background: var(--xp-selected-gradient);
+            color: white;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--xp-window-bg);
+            border-top: 1px solid var(--xp-dark-gray);
+            padding: 2px 8px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 22px;
+        }
+
+        .status-panel {
+            border: 1px inset var(--xp-gray);
+            padding: 1px 4px;
+            background: var(--xp-white);
+        }
+
+        /* XP Icons */
+        .xp-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 4px;
+        }
+
+        /* Layers Panel */
+        .layers-panel {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            width: 200px;
+            background: var(--xp-window-bg);
+            border: 2px outset var(--xp-gray);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .layers-header {
+            background: var(--xp-gray);
+            padding: 2px 6px;
+            font-weight: bold;
+            border-bottom: 1px solid var(--xp-dark-gray);
+        }
+
+        .layer-item {
+            padding: 2px 6px;
+            border-bottom: 1px solid #d0d0d0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .layer-item:hover {
+            background: #e8e5e0;
+        }
+
+        .layer-checkbox {
+            margin-right: 6px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .chat-panel {
+                width: 280px;
+                right: 10px;
+            }
+            
+            .layers-panel {
+                width: 180px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-interface">
+        <!-- Menu Bar -->
+        <div class="xp-menubar">
+            <div class="menu-item">File</div>
+            <div class="menu-item">Edit</div>
+            <div class="menu-item">View</div>
+            <div class="menu-item">Map</div>
+            <div class="menu-item">Tools</div>
+            <div class="menu-item">Help</div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="xp-toolbar">
+            <button class="xp-button" onclick="toggleLayers()">🗂️ Layers</button>
+            <button class="xp-button" onclick="toggleChat()">💬 Chat</button>
+            <div class="toolbar-separator"></div>
+            <button class="xp-button">📍 Add Marker</button>
+            <button class="xp-button">📏 Measure</button>
+            <button class="xp-button">🔍 Search</button>
+            <div class="toolbar-separator"></div>
+            <button class="xp-button" id="refreshButton">↻ Refresh</button>
+            <button class="xp-button">🎯 Center</button>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-container" id="mapContainer">
+            <iframe src="map.html" style="border: none; width: 100%; height: 100%;"></iframe>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div>
+                <span class="status-panel">Ready</span>
+                <span class="status-panel">Coordinates: 40.7128° N, 74.0060° W</span>
+            </div>
+            <div>
+                <span class="status-panel">Zoom: 100%</span>
+                <span class="status-panel">Scale: 1:50000</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-header">
+            <span>🔒 Secure Communications</span>
+            <button class="control-btn" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-body">
+            <div style="padding: 8px; border-bottom: 1px solid #d0d0d0;">
+                <strong>System:</strong> Chat interface initialized.<br>
+                <small style="color: #808080;">12:34 PM</small>
+            </div>
+            <div style="padding: 8px;">
+                <strong>User:</strong> Map interface ready for operations.<br>
+                <small style="color: #808080;">12:35 PM</small>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" class="chat-input" placeholder="Type a message...">
+            <button class="xp-button primary">Send</button>
+        </div>
+    </div>
+
+    <!-- Layers Panel -->
+    <div class="layers-panel" id="layersPanel" style="display: none;">
+        <div class="xp-titlebar">
+            <div class="title">Map Layers</div>
+            <button class="control-btn" onclick="toggleLayers()">✕</button>
+        </div>
+        <div class="layers-header">Available Layers</div>
+        <div class="layer-item">
+            <input type="checkbox" class="layer-checkbox" checked> Embassy Locations
+        </div>
+        <div class="layer-item">
+            <input type="checkbox" class="layer-checkbox" checked> Danger Zones
+        </div>
+        <div class="layer-item">
+            <input type="checkbox" class="layer-checkbox" checked> Safe Places
+        </div>
+        <div class="layer-item">
+            <input type="checkbox" class="layer-checkbox" checked> Attack Locations
+        </div>
+    </div>
+
+    <script>
+        function toggleChat() {
+            const chatPanel = document.getElementById('chatPanel');
+            chatPanel.classList.toggle('open');
+        }
+
+        function toggleLayers() {
+            const layersPanel = document.getElementById('layersPanel');
+            layersPanel.style.display = layersPanel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function refreshMap() {
+            const layerItems = layersPanel.querySelectorAll('.layer-item');
+            const layers = [];
+
+            for (let i = 0; i < layerItems.length; i++) {
+                const item = layerItems[i];
+                const checkbox = item.querySelector('.layer-checkbox');
+                const label = item.textContent.trim();
+
+                layers.push({
+                    name: label,
+                    checked: checkbox.checked
+                });
+            }
+
+            fetch('http://localhost:5000/update-map', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(layers)
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Server response:', data);
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('refreshButton').addEventListener('click', () => {
+            refreshMap();
+        });
+
+        // Simulate XP window effects
+        document.querySelectorAll('.xp-button').forEach(button => {
+            button.addEventListener('mousedown', function() {
+                this.style.transform = 'translate(1px, 1px)';
+            });
+            
+            button.addEventListener('mouseup', function() {
+                this.style.transform = 'translate(0, 0)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // Add some interactive feedback
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.addEventListener('click', function(e) {
+                // Create a simple click effect
+                const clickEffect = document.createElement('div');
+                clickEffect.style.position = 'absolute';
+                clickEffect.style.left = e.offsetX + 'px';
+                clickEffect.style.top = e.offsetY + 'px';
+                clickEffect.style.width = '20px';
+                clickEffect.style.height = '20px';
+                clickEffect.style.border = '2px solid #0054e3';
+                clickEffect.style.borderRadius = '50%';
+                clickEffect.style.pointerEvents = 'none';
+                clickEffect.style.animation = 'pulse 0.6s ease-out';
+                this.appendChild(clickEffect);
+                
+                setTimeout(() => {
+                    clickEffect.remove();
+                }, 600);
+            });
+        });
+
+        // Add pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(0); opacity: 1; }
+                100% { transform: scale(2); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
